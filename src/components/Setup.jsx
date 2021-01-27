@@ -11,6 +11,8 @@ import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
+import FileSelector from './FileSelector'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -23,31 +25,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
-  input: {
-    display: 'none',
-  },
-  inputBase: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-  fileInputField: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
-    width: 400,
-  },
   stepper: {
     backgroundColor: "transparent"
   },
   navigationButtons: {
     marginTop: "5em"
-  },
-  fileSelectButton: {
-    padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
   },
 }));
 
@@ -59,27 +41,11 @@ function getStepContent(stepIndex, classes) {
   switch (stepIndex) {
     case 0:
       return (
-        <Paper className={classes.fileInputField}>
-          <InputBase 
-            className={classes.inputBase}
-            id="outlined-basic"
-            placeholder="Path of iso"
-            disabled
-          />
-          <Divider className={classes.divider} orientation="vertical"/>
-          <input
-            accept=".iso"
-            className={classes.input}
-            id="contained-button-file"
-            multiple
-            type="file"
-          />
-          <label htmlFor="contained-button-file">
-            <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span">
-              <InsertDriveFileIcon />
-            </IconButton>
-          </label>
-        </Paper>
+        <FileSelector
+          accept=".iso"
+          directory={false}
+          multiple={false}
+        />
       );
     case 1:
       return (
