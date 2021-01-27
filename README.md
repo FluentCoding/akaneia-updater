@@ -42,8 +42,8 @@ Example manifest.json:
 ```json
 {
     "name": "Akaneia",
-    "version": "1.0.5"
-    "packages" : [
+    "version": "1.0.5",
+    "packages": [
         {
             "name" : "stable",
             "patch": "stable/patch.xdelta"
