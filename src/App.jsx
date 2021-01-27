@@ -1,12 +1,11 @@
 import React from 'react'
 import logo from './static/images/main_logo.png';
 import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/styles/makeStyles';
-import config from './util/config'
+//import config from './util/config'
 
-import Updater from './components/Updater'
+import Setup from './components/Setup'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,10 +37,7 @@ export default function App() {
           <img src={logo} alt="logo" className={classes.logo} />
         </Grid>
         <Grid item>
-          <Button className={classes.updateButton} variant="outlined" color="primary">update</Button>
-          <Updater className={classes.updateLogs}></Updater>
-        </Grid>
-        <Grid item>
+          <Setup />
         </Grid>
       </Grid>
     </Container>
