@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from './static/images/main_logo.png';
+import logo from './logo.svg';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/styles/makeStyles';
@@ -12,6 +12,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
   },
   logo: {
+    height: "13rem",
+    pointerEvents: "none",
     margin: "3rem",
     userSelect: 'none',
     userDrag: 'none'
@@ -36,7 +38,7 @@ export default function App() {
         alignItems="center"
         >
         <Grid item>
-          <img src={logo} alt="logo" className={classes.logo} />
+          <img src={logo} alt="logo" className={classes.logo} draggable={false} />
         </Grid>
         <Grid item>
           <Setup />
