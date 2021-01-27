@@ -1,0 +1,14 @@
+{
+    "name": "Akaneia",
+    "version": "0.5.1",
+    "packages": [
+        {
+            "name": "experimental",
+            "patch": "experimental/patch.xdelta"
+        },
+        {
+            "name": "stable",
+            "patch": "stable/patch.xdelta"
+        }
+    ]
+}
