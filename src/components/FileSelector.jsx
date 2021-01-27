@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fileInputField: {
     padding: '2px 4px',
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     width: 400,
   },

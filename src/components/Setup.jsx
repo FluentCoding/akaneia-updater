@@ -5,11 +5,15 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, setRef } from '@material-ui/core';
 
 import FileSelector from './FileSelector';
 import useSetupStore from '../SetupStore';
 import md5File from 'md5-file';
+
+const validMD5Hashes = [
+  "0e63d4223b01d9aba596259dc155a174"
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +44,13 @@ function validateStep(stepIndex, state) {
     case 0:
       if (state.isoFile === undefined)
         return false;
-      return md5File(state.isoFile.path);
+      return md5File(state.isoFile.path).then(received => {
+        if (validMD5Hashes.includes(received)) {
+          return;
+        } else {
+          return Promise.reject("This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02");
+        }
+      });
   }
 };
 
@@ -89,13 +99,13 @@ export default function HorizontalLabelPositionBelowStepper() {
     const result = validateStep(activeStep, state);
     if (result instanceof Promise) {
       setLoading(true);
-      result.then((promiseResult) => {
+      setError("");
+      result.then(() => {
         setLoading(false);
-        if (!promiseResult) {
-          setActiveStep((step) => step + 1);
-        } else {
-          setError(promiseResult);
-        }
+        setActiveStep((step) => step + 1);
+      }, (rejection) => {
+        setLoading(false);
+        setError(rejection);
       });
     } else {
       setActiveStep((step) => step + 1);
@@ -125,7 +135,7 @@ export default function HorizontalLabelPositionBelowStepper() {
             <Button onClick={handleReset}>Patch again</Button>
           </div>
         ) : (
-          <div>
+          <div style={{textAlign: 'center'}}>
             <Typography className={classes.instructions}><StepContent stepIndex={activeStep} /></Typography>
             <div style={{color: 'red', fontSize: 14, marginTop: 20, marginBottom: -52}}>{error}</div>
             <div className={classes.navigationButtons}>
