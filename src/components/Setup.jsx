@@ -146,7 +146,7 @@ export default function HorizontalLabelPositionBelowStepper() {
               >
                 Back
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button variant="contained" color="primary" onClick={handleNext} disabled={loading}>
                 {loading ? <CircularProgress size={24} color="black" /> : activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
             </div>
