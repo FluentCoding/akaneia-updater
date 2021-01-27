@@ -11,6 +11,7 @@ function createWindow() {
     width: 600,
     minWidth: 600,
     minHeight: 620,
+    icon: __dirname + '/icon.png',
     webPreferences: {
 	    nodeIntegration: true,
 		  enableRemoteModule: true,
