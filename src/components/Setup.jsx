@@ -37,19 +37,23 @@ function getSteps() {
   return ['Set SSBM iso', 'Set iso folder', 'Finish setup'];
 }
 
-function getStepContent(stepIndex, classes) {
+function getStepContent(stepIndex) {
   switch (stepIndex) {
     case 0:
       return (
         <FileSelector
           accept=".iso"
-          directory={false}
-          multiple={false}
+          placeholder="Path of vanilla iso"
+          key="0"
         />
       );
     case 1:
       return (
-        <InputBase id="outlined-basic" label="Path of iso folder" variant="outlined"/>
+        <FileSelector
+          placeholder="Path of your iso folder"
+          directory
+          key="1"
+        />
       );
     case 2:
       return 'This is the bit I really care about!';

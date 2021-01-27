@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
@@ -32,7 +32,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FileSelector({accept, directory, multiple}) {
+
+export default function FileSelector({accept, placeholder, directory, multiple}) {
+  const [ fileName, setFileName ] = useState("");
+  const [ selectedFile, setSelectedFile ] = useState(undefined);
+
+  const selectFile = (event) => {
+    setSelectedFile(event.target.files);
+    setFileName(event.target.files[0].name)
+  };
+
+
   const classes = useStyles();
 
   return (
@@ -40,16 +50,18 @@ export default function FileSelector({accept, directory, multiple}) {
       <InputBase 
         className={classes.inputBase}
         id="outlined-basic"
-        placeholder="Path of iso"
+        placeholder={placeholder}
+        value={fileName}
         disabled
       />
-      <Divider className={classes.divider} orientation="vertical"/>
+      <Divider className={classes.divider} orientation="vertical" />
       <input
         accept={accept}
         className={classes.input}
         id="contained-button-file"
         dir={directory}
         multiple={multiple}
+        onChange={selectFile}
         type="file"
       />
       <label htmlFor="contained-button-file">
