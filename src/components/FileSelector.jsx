@@ -34,8 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function FileSelector({accept, placeholder, directory, multiple, file, setFile}) {
+  const [ path, setPath ] = useState(file?.name); // DUPLICATE FOR RERENDER
   const selectFile = (e) => {
-    setFile(e.target.files[0])
+    setFile(e.target.files[0]);
+    setPath(e.target.files[0].name); // rerender
   };
   const classes = useStyles();
 
@@ -45,7 +47,7 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
         className={classes.inputBase}
         id="outlined-basic"
         placeholder={placeholder}
-        value={file.name}
+        value={path}
         disabled
       />
       <Divider className={classes.divider} orientation="vertical" />

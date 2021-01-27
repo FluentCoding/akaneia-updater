@@ -1,8 +1,6 @@
 import fs from 'fs-extra';
 import _ from 'lodash';
 import crypto from 'crypto';
-import electronSettings from 'electron-settings';
-import log from 'electron-log';
 
 const { dialog } = require('electron').remote;
 

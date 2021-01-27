@@ -12,6 +12,7 @@ function createWindow() {
     minWidth: 600,
     minHeight: 620,
     icon: __dirname + '/icon.png',
+    title: "Akaneia Updater",
     webPreferences: {
 	    nodeIntegration: true,
 		  enableRemoteModule: true,
