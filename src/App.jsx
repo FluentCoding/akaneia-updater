@@ -7,12 +7,14 @@ import makeStyles from '@material-ui/styles/makeStyles';
 
 import Setup from './components/Setup'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
   },
   logo: {
     margin: "3rem",
+    userSelect: 'none',
+    userDrag: 'none'
   },
   updateButton: {
     marginBottom: "2rem",
