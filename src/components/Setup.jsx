@@ -1,15 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import Paper from '@material-ui/core/Paper';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Divider from '@material-ui/core/Divider';
-import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 import FileSelector from './FileSelector'
 
@@ -37,7 +32,10 @@ function getSteps() {
   return ['Set SSBM iso', 'Set iso folder', 'Finish setup'];
 }
 
-function getStepContent(stepIndex) {
+const StepContent = ({ stepIndex }) => {
+  const [ isoPath, setIsoPath ] = useState("");
+  const [ destFolder, setDestFolder ] = useState("");
+
   switch (stepIndex) {
     case 0:
       return (
@@ -45,6 +43,8 @@ function getStepContent(stepIndex) {
           accept=".iso"
           placeholder="Path of vanilla iso"
           key="0"
+          file={isoPath}
+          setFile={setIsoPath}
         />
       );
     case 1:
@@ -53,6 +53,8 @@ function getStepContent(stepIndex) {
           placeholder="Path of your iso folder"
           directory
           key="1"
+          file={destFolder}
+          setFile={setDestFolder}
         />
       );
     case 2:
@@ -64,7 +66,7 @@ function getStepContent(stepIndex) {
 
 export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [ activeStep, setActiveStep ] = useState(0);
   const steps = getSteps();
 
   const handleNext = () => {
@@ -96,7 +98,7 @@ export default function HorizontalLabelPositionBelowStepper() {
           </div>
         ) : (
           <div>
-            <Typography className={classes.instructions}>{getStepContent(activeStep, classes)}</Typography>
+            <Typography className={classes.instructions}><StepContent stepIndex={activeStep} /></Typography>
             <div className={classes.navigationButtons}>
               <Button
                 disabled={activeStep === 0}

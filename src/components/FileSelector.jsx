@@ -33,16 +33,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function FileSelector({accept, placeholder, directory, multiple}) {
-  const [ fileName, setFileName ] = useState("");
-  const [ selectedFile, setSelectedFile ] = useState(undefined);
-
-  const selectFile = (event) => {
-    setSelectedFile(event.target.files);
-    setFileName(event.target.files[0].name)
+export default function FileSelector({accept, placeholder, directory, multiple, file, setFile}) {
+  const selectFile = (e) => {
+    setFile(e.target.files[0])
   };
-
-
   const classes = useStyles();
 
   return (
@@ -51,7 +45,7 @@ export default function FileSelector({accept, placeholder, directory, multiple})
         className={classes.inputBase}
         id="outlined-basic"
         placeholder={placeholder}
-        value={fileName}
+        value={file.name}
         disabled
       />
       <Divider className={classes.divider} orientation="vertical" />
@@ -65,9 +59,9 @@ export default function FileSelector({accept, placeholder, directory, multiple})
         type="file"
       />
       <label htmlFor="contained-button-file">
-      <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span">
-        <InsertDriveFileIcon />
-      </IconButton>
+        <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span">
+          <InsertDriveFileIcon />
+        </IconButton>
       </label>
     </Paper>
   );
