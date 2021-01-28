@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { CircularProgress, setRef } from '@material-ui/core';
 
 import FileSelector from './FileSelector';
+import DirSelector from './DirectorySelector';
 import useSetupStore from '../SetupStore';
 import md5File from 'md5-file';
 
@@ -51,20 +52,22 @@ function validateStep(stepIndex, state) {
           return Promise.reject("This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02");
         }
       });
+    default:
+      return undefined;
   }
 };
 
 const StepContent = ({ stepIndex }) => {
   const isoFile = useSetupStore(state => state.isoFile);
   const setIsoFile = useSetupStore(state => state.setIsoFile);
-  const destPath = useSetupStore(state => state.destPath);
-  const setDestPath = useSetupStore(state => state.setDestPath);
+  const destFolder = useSetupStore(state => state.destFolder);
+  const setDestFolder = useSetupStore(state => state.setDestFolder);
   switch (stepIndex) {
     case 0:
       return (
         <FileSelector
           accept=".iso"
-          placeholder="Path of vanilla iso"
+          placeholder="Select a vanilla SSBM iso"
           key="0"
           file={isoFile}
           setFile={setIsoFile}
@@ -72,12 +75,11 @@ const StepContent = ({ stepIndex }) => {
       );
     case 1:
       return (
-        <FileSelector
-          placeholder="Path of your iso folder"
-          directory
+        <DirSelector
+          placeholder="Select your iso folder"
           key="1"
-          file={destPath}
-          setFile={setDestPath}
+          directory={destFolder}
+          setDirectory={setDestFolder}
         />
       );
     case 2:
@@ -124,7 +126,7 @@ export default function HorizontalLabelPositionBelowStepper() {
       <Stepper className={classes.stepper} activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
-            <StepLabel></StepLabel>
+            <StepLabel />
           </Step>
         ))}
       </Stepper>
