@@ -34,7 +34,11 @@ function createWindow() {
     }
   });
   mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "/../build/index.html")}`);
-  mainWindow.setMenu(null);
+
+  // Hide menu on prod
+  if (!isDev)
+    mainWindow.setMenu(null);
+
   mainWindow.on("closed", () => (mainWindow = null));
 
   electron.ipcMain.on('select-dirs', async (event, arg) => {
