@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import InputBase from '@material-ui/core/InputBase';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import Folder from '@material-ui/icons/Folder';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -32,14 +33,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-export default function FileSelector({accept, placeholder, directory, multiple, file, setFile}) {
-  const [ path, setPath ] = useState(file?.name); // DUPLICATE FOR RERENDER
+export default function FileSelector({accept, placeholder, directory, multiple, file, setFile, key}) {
+  const [ path, setPath ] = useState(directory ? file : file?.name); // duplicate for rerender
   const selectFile = (e) => {
-    setFile(e.target.files[0]);
-    setPath(e.target.files[0].name); // rerender
+    var value = e.target.files[0];
+    setPath(value.name);
+    setFile(value);
   };
   const classes = useStyles();
+
+  useEffect(() => {
+    if (directory) {
+      require('electron').ipcRenderer.on('dir-selected-' + key, (event, args) => {
+        setFile(args);
+        setPath(args);
+      });
+    }
+  }, []);
 
   return (
     <Paper className={classes.fileInputField}>
@@ -54,15 +64,21 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
       <input
         accept={accept}
         className={classes.input}
-        id="contained-button-file"
-        dir={directory}
+        id={directory ? undefined : "contained-button-file"}
         multiple={multiple}
-        onChange={selectFile}
+        onChange={directory ? undefined : selectFile}
         type="file"
       />
       <label htmlFor="contained-button-file">
-        <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span">
-          <InsertDriveFileIcon />
+        <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span" onClick={() => {
+          if (directory) {
+            window.postMessage({
+              type: 'select-dirs',
+              key: key
+            })
+          }
+          }}>
+          {directory ? <Folder /> : <InsertDriveFileIcon />}
         </IconButton>
       </label>
     </Paper>

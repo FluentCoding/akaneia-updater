@@ -15,6 +15,10 @@ const validMD5Hashes = [
   "0e63d4223b01d9aba596259dc155a174"
 ];
 
+const specifcyISO = "You have to specify an ISO!";
+const specifcyDest = "You have to specify a destination folder!";
+const invalidMD5 = "This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -42,23 +46,26 @@ function getSteps() {
 function validateStep(stepIndex, state) {
   switch(stepIndex) {
     case 0:
-      if (state.isoFile === undefined)
-        return false;
+      if (!state.isoFile)
+        return specifcyISO;
       return md5File(state.isoFile.path).then(received => {
         if (validMD5Hashes.includes(received)) {
           return;
         } else {
-          return Promise.reject("This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02");
+          return Promise.reject(invalidMD5);
         }
       });
+    case 1:
+      if (!state.destFolder)
+        return specifcyDest;
   }
 };
 
 const StepContent = ({ stepIndex }) => {
   const isoFile = useSetupStore(state => state.isoFile);
   const setIsoFile = useSetupStore(state => state.setIsoFile);
-  const destPath = useSetupStore(state => state.destPath);
-  const setDestPath = useSetupStore(state => state.setDestPath);
+  const destFolder = useSetupStore(state => state.destFolder);
+  const setDestFolder = useSetupStore(state => state.setDestFolder);
   switch (stepIndex) {
     case 0:
       return (
@@ -76,8 +83,8 @@ const StepContent = ({ stepIndex }) => {
           placeholder="Path of your iso folder"
           directory
           key="1"
-          file={destPath}
-          setFile={setDestPath}
+          file={destFolder}
+          setFile={setDestFolder}
         />
       );
     case 2:
@@ -108,11 +115,15 @@ export default function HorizontalLabelPositionBelowStepper() {
         setError(rejection);
       });
     } else {
-      setActiveStep((step) => step + 1);
+      if (!result)
+        setActiveStep((step) => step + 1);
+      else
+        setError(result);
     }
   };
 
   const handleBack = () => {
+    setError("");
     setActiveStep((step) => step - 1);
   };
   const handleReset = () => {
