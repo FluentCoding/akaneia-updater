@@ -1,10 +1,18 @@
 {
   "name": "akaneia-updater",
   "version": "0.1.0",
+  "author": "Ananas",
+  "contributors": [
+    "FluentCoding"
+  ],
+  "description": "An updater for the Akainea build",
   "private": true,
+  "repository": "git@github.com:ananas-dev/akaneia-updater",
+  "license": "MIT",
   "main": "public/electron.js",
   "build": {
-    "appId": "org.akaneia",
+    "appId": "org.akaneia.akaneia-updater",
+    "productName": "Akaneia Updater",
     "mac": {
       "category": "public.app-category.games"
     },
@@ -24,7 +32,9 @@
     "@octokit/core": "^3.2.4",
     "cross-env": "^7.0.3",
     "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.3.1",
     "electron-settings": "^4.0.2",
+    "electron-updater": "^4.3.5",
     "fontsource-roboto": "^4.0.0",
     "lodash": "^4.17.20",
     "md5-file": "^5.0.0",
@@ -46,7 +56,8 @@
     "build": "yarn react-build && yarn electron-build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "gh-publish": "electron-builder -p always"
   },
   "eslintConfig": {
     "extends": [
