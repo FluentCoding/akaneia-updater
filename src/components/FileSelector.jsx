@@ -40,6 +40,7 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
     setPath(value.name);
     setFile(value);
   };
+  
   const classes = useStyles();
 
   useEffect(() => {

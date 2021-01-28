@@ -1,9 +1,22 @@
-const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const path = require("path");
-const isDev = require("electron-is-dev");
+const electron = require('electron');
+const path = require('path');
+const isDev = require('electron-is-dev');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 
+// Configure logging
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+// Module to control application life.
+const app = electron.app;
+
+// Module to control native browser window.
+const BrowserWindow = electron.BrowserWindow;
+
+// Window object
 let mainWindow;
 
 function createWindow() {
@@ -13,6 +26,7 @@ function createWindow() {
     minHeight: 620,
     icon: __dirname + '/icon.png',
     title: "Akaneia Updater",
+    backgroundColor: '#303030', // avoid white corners when resizing
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
 	    nodeIntegration: true,
@@ -43,4 +57,27 @@ app.on("activate", () => {
   }
 });
 
-console.log(app.getPath("userData"));
+// Auto Updates
+
+const sendStatusToWindow = (text) => {
+  log.info(text);
+  if (mainWindow) {
+    mainWindow.webContents.send('message', text);
+  }
+};
+
+autoUpdater.on('update-available', info => {
+  sendStatusToWindow('Update available, dowloading...');
+});
+
+autoUpdater.on('error', err => {
+  sendStatusToWindow(`Error in auto-updater: ${err.toString()}`);
+});
+
+autoUpdater.on('update-downloaded', info => {
+  sendStatusToWindow('Updater downloaded; will install now')
+})
+
+autoUpdater.on('update-downloaded', info => {
+  autoUpdater.quitAndInstall();
+})

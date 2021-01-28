@@ -58,6 +58,8 @@ function validateStep(stepIndex, state) {
     case 1:
       if (!state.destFolder)
         return specifcyDest;
+    default:
+      return undefined;
   }
 };
 
@@ -71,7 +73,7 @@ const StepContent = ({ stepIndex }) => {
       return (
         <FileSelector
           accept=".iso"
-          placeholder="Path of vanilla iso"
+          placeholder="Select a vanilla SSBM iso"
           key="0"
           file={isoFile}
           setFile={setIsoFile}
@@ -80,9 +82,9 @@ const StepContent = ({ stepIndex }) => {
     case 1:
       return (
         <FileSelector
-          placeholder="Path of your iso folder"
-          directory
+          placeholder="Select your iso folder"
           key="1"
+          directory
           file={destFolder}
           setFile={setDestFolder}
         />
@@ -135,7 +137,7 @@ export default function HorizontalLabelPositionBelowStepper() {
       <Stepper className={classes.stepper} activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
-            <StepLabel></StepLabel>
+            <StepLabel />
           </Step>
         ))}
       </Stepper>
