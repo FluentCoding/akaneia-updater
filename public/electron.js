@@ -26,6 +26,7 @@ function createWindow() {
     minHeight: 620,
     icon: __dirname + '/icon.png',
     title: "Akaneia Updater",
+    backgroundColor: '#303030', // avoid white corners when resizing
     webPreferences: {
 	    nodeIntegration: true,
 		  enableRemoteModule: true,
