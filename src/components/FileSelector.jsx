@@ -43,7 +43,7 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
   
   const classes = useStyles();
 
-  useEffect(() => {
+  useEffect((directory, key, setFile) => {
     if (directory) {
       require('electron').ipcRenderer.on('dir-selected-' + key, (event, args) => {
         setFile(args);

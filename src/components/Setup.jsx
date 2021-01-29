@@ -5,7 +5,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CircularProgress, setRef } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 
 import FileSelector from './FileSelector';
 import useSetupStore from '../SetupStore';
