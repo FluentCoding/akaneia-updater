@@ -12,7 +12,7 @@ import useSetupStore from "../SetupStore";
 import Updater from "../components/Updater";
 import md5File from "md5-file";
 import Logo from "../components/Logo";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
 
@@ -184,10 +184,7 @@ export default function HorizontalLabelPositionBelowStepper() {
               {error}
             </div>
             <div className={classes.navigationButtons}>
-              <Button
-                onClick={handleBack}
-                className={classes.backButton}
-              >
+              <Button onClick={handleBack} className={classes.backButton}>
                 Back
               </Button>
               <Button
