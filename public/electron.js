@@ -5,9 +5,6 @@ const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
 const Store = require("electron-store");
 
-// Make the store accessible from the renderer
-Store.initRenderer();
-
 // Configure logging
 
 autoUpdater.logger = log;
@@ -105,3 +102,6 @@ autoUpdater.on("update-downloaded", (info) => {
 autoUpdater.on("update-downloaded", (info) => {
   autoUpdater.quitAndInstall();
 });
+
+// Make the store accessible from the renderer
+Store.initRenderer();
