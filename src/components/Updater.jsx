@@ -55,16 +55,25 @@ export default function ShowUpdate({ isoPath, destFolder }) {
 
   return (
     <Box>
-      {assets && (<>
-        <Typography className={classes.instructions}>
-          Choose the version you want to use
-        </Typography>
-        {assets.map((asset) => (
-          <Button color="primary" variant="contained" style={{marginRight: 10}} onClick={() => {
-            alert(asset.name)
-          }}>{path.basename(asset.name, ".xdelta")}</Button>
-        ))}
-      </>)}
+      {assets && (
+        <>
+          <Typography className={classes.instructions}>
+            Choose the version you want to use
+          </Typography>
+          {assets.map((asset) => (
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ marginRight: 10 }}
+              onClick={() => {
+                alert(asset.name);
+              }}
+            >
+              {path.basename(asset.name, ".xdelta")}
+            </Button>
+          ))}
+        </>
+      )}
     </Box>
   );
 }

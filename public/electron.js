@@ -50,11 +50,12 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 
   electron.ipcMain.on("select-dirs", async (event, arg) => {
-    const result = await electron.dialog.showSaveDialogSync(electron.mainWindow, {
-      filters: [
-        {name: 'Gamecube Game Image', extensions: ['iso']}
-      ]
-    });
+    const result = await electron.dialog.showSaveDialogSync(
+      electron.mainWindow,
+      {
+        filters: [{ name: "Gamecube Game Image", extensions: ["iso"] }],
+      }
+    );
     if (!result) return;
     console.log(result);
     mainWindow.webContents.send("dir-selected-" + arg, result);
