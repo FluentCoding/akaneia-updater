@@ -58,6 +58,8 @@ function validateStep(stepIndex, state) {
     case 1:
       if (!state.destFolder)
         return specifcyDest;
+      else
+        return;
     default:
       return undefined;
   }
@@ -117,10 +119,12 @@ export default function HorizontalLabelPositionBelowStepper() {
         setError(rejection);
       });
     } else {
-      if (!result)
+      if (!result) {
+        setError("");
         setActiveStep((step) => step + 1);
-      else
+      } else {
         setError(result);
+      }
     }
   };
 
