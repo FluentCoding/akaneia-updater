@@ -74,7 +74,7 @@ const StepContent = ({ stepIndex }) => {
       return (
         <FileSelector
           accept=".iso"
-          placeholder="Select a vanilla SSBM iso"
+          placeholder="Select an unmodified SSBM iso"
           key="0"
           file={isoFile}
           setFile={setIsoFile}
@@ -175,10 +175,10 @@ export default function HorizontalLabelPositionBelowStepper() {
             </Typography>
             <div
               style={{
-                color: "red",
+                color: "#ff0033",
                 fontSize: 14,
                 marginTop: 20,
-                marginBottom: -52,
+                marginBottom: error ? -60 : -50,
               }}
             >
               {error}

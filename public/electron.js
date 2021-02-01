@@ -46,11 +46,14 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 
   electron.ipcMain.on("select-dirs", async (event, arg) => {
-    const result = await electron.dialog.showOpenDialog(electron.mainWindow, {
-      properties: ["openDirectory"],
+    const result = await electron.dialog.showSaveDialogSync(electron.mainWindow, {
+      filters: [
+        {name: 'Gamecube Game Image', extensions: ['iso']}
+      ]
     });
-    if (result.filePaths.length === 0) return;
-    mainWindow.webContents.send("dir-selected-" + arg, result.filePaths);
+    if (!result) return;
+    console.log(result);
+    mainWindow.webContents.send("dir-selected-" + arg, result);
   });
 }
 app.on("ready", createWindow);

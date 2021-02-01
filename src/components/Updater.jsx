@@ -4,14 +4,13 @@ import makeStyles from "@material-ui/styles/makeStyles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import path from "path";
 
 const useStyles = makeStyles((theme) => ({
   instructions: {
-    margin: "0.5rem",
-    marginBottom: "2rem",
+    margin: "0.2rem",
+    marginBottom: "1rem",
     fontSize: "1.3rem",
   },
 }));
@@ -56,23 +55,16 @@ export default function ShowUpdate({ isoPath, destFolder }) {
 
   return (
     <Box>
-      {assets && (
-        <Box>
-          <Typography className={classes.instructions}>
-            Choose the version you want to use
-          </Typography>
-          <ButtonGroup
-            color="primary"
-            orientation="vertical"
-            variant="contained"
-            aria-label="contained primary button group"
-          >
-            {assets.map((asset) => (
-              <Button>{path.basename(asset.name, ".xdelta")}</Button>
-            ))}
-          </ButtonGroup>
-        </Box>
-      )}
+      {assets && (<>
+        <Typography className={classes.instructions}>
+          Choose the version you want to use
+        </Typography>
+        {assets.map((asset) => (
+          <Button color="primary" variant="contained" style={{marginRight: 10}} onClick={() => {
+            alert(asset.name)
+          }}>{path.basename(asset.name, ".xdelta")}</Button>
+        ))}
+      </>)}
     </Box>
   );
 }
