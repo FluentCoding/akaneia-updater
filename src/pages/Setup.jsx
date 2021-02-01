@@ -5,11 +5,11 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { CircularProgress } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import FileSelector from "./FileSelector";
+import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
-import Updater from "./Updater";
+import Updater from "../components/Updater";
 import md5File from "md5-file";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
