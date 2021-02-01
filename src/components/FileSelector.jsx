@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FileSelector({accept, placeholder, directory, multiple, file, setFile, key, loading}) {
+export default function FileSelector({accept, placeholder, directory, multiple, file, setFile, key}) {
   const [ path, setPath ] = useState(directory ? file : file?.name); // duplicate for rerender
   const loading = useSetupStore(store => store.loading);
   const selectFile = (e) => {
@@ -45,14 +45,14 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
   
   const classes = useStyles();
 
-  useEffect((directory, key, setFile) => {
+  useEffect(() => {
     if (directory) {
       require('electron').ipcRenderer.on('dir-selected-' + key, (event, args) => {
         setFile(args);
         setPath(args);
       });
     }
-  }, []);
+  }, [directory, key, setFile]);
 
   return (
     <Paper className={classes.fileInputField}>
