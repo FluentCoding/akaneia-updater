@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import InputBase from '@material-ui/core/InputBase';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import Folder from '@material-ui/icons/Folder';
+import useSetupStore from '../SetupStore'
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -33,8 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FileSelector({accept, placeholder, directory, multiple, file, setFile, key}) {
+export default function FileSelector({accept, placeholder, directory, multiple, file, setFile, key, loading}) {
   const [ path, setPath ] = useState(directory ? file : file?.name); // duplicate for rerender
+  const loading = useSetupStore(store => store.loading);
   const selectFile = (e) => {
     var value = e.target.files[0];
     setPath(value.name);
@@ -70,9 +72,9 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
         onChange={directory ? undefined : selectFile}
         type="file"
       />
-      <label htmlFor="contained-button-file">
+      <label htmlFor={loading ? "" : "contained-button-file"}>
         <IconButton className={classes.fileSelectButton} variant="contained" color="primary" component="span" onClick={() => {
-          if (directory) {
+          if (directory && !loading) {
             window.postMessage({
               type: 'select-dirs',
               key: key

@@ -98,7 +98,7 @@ const StepContent = ({ stepIndex }) => {
 
 export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
-  const [ loading, setLoading ] = useState(false);
+  const [ loading, setLoading ] = [ useSetupStore(state => state.loading), useSetupStore(state => state.setLoading) ];
   const [ error, setError ] = useState("");
   const [ activeStep, setActiveStep ] = useState(0);
   const steps = getSteps();
