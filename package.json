@@ -33,7 +33,7 @@
     "cross-env": "^7.0.3",
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.3.1",
-    "electron-settings": "^4.0.2",
+    "electron-store": "^7.0.1",
     "electron-updater": "^4.3.5",
     "fontsource-roboto": "^4.0.0",
     "lodash": "^4.17.20",
