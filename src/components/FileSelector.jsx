@@ -49,9 +49,6 @@ export default function FileSelector({accept, placeholder, directory, multiple, 
     if (directory) {
       require('electron').ipcRenderer.on('dir-selected-' + key, (_event, args) => {
         var url = args[0];
-        if (!url) {
-          return;
-        }
 
         setFile(url);
         setPath(url);
