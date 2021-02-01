@@ -3,6 +3,10 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
+const Store = require("electron-store");
+
+// Make the store accessible from the renderer
+Store.initRenderer();
 
 // Configure logging
 
