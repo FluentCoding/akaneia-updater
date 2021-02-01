@@ -85,7 +85,7 @@ export default function FileSelector({
         onChange={directory ? undefined : selectFile}
         type="file"
       />
-      <label htmlFor={loading ? "" : "contained-button-file"}>
+      <label htmlFor="contained-button-file">
         <IconButton
           className={classes.fileSelectButton}
           variant="contained"

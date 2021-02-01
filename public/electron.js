@@ -31,6 +31,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       enableRemoteModule: true,
+      contextIsolation: false,
     },
   });
   mainWindow.loadURL(
@@ -40,7 +41,7 @@ function createWindow() {
   );
 
   // Hide menu on prod
-  if (!isDev) mainWindow.setMenu(null);
+  //if (!isDev) mainWindow.setMenu(null);
 
   mainWindow.on("closed", () => (mainWindow = null));
 
@@ -73,8 +74,16 @@ const sendStatusToWindow = (text) => {
   }
 };
 
+autoUpdater.on("checking-for-update", () => {
+  log.info("Checking for update...");
+});
+
 autoUpdater.on("update-available", (info) => {
   sendStatusToWindow("Update available, dowloading...");
+});
+
+autoUpdater.on("update-not-available", (info) => {
+  log.info("Update not available.");
 });
 
 autoUpdater.on("error", (err) => {

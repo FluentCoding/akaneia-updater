@@ -9,6 +9,7 @@ export default function Main() {
     <Switch>
       <Route exact path="/" component={Home}></Route>
       <Route exact path="/setup" component={Setup}></Route>
+      <Route exact path="/settings" component={Settings}></Route>
     </Switch>
   );
 }
