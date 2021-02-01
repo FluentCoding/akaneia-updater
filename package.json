@@ -57,7 +57,8 @@
     "start": "concurrently -s first -k -n \"REACT,ELECTRON\" -c \"blue.bold,magenta.bold\" \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "gh-publish": "electron-builder -p always"
+    "gh-publish": "electron-builder -p always",
+    "format": "prettier --write src/ public/"
   },
   "eslintConfig": {
     "extends": [
@@ -81,6 +82,7 @@
     "concurrently": "^5.3.0",
     "electron": "^11.2.0",
     "electron-builder": "^22.9.1",
-    "wait-on": "^5.2.1"
+    "wait-on": "^5.2.1",
+    "prettier": "^2.2.1"
   }
 }

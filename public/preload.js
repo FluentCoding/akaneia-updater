@@ -1,9 +1,9 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require("electron");
 
-process.once('loaded', () => {
-  window.addEventListener('message', evt => {
-    if (evt.data.type === 'select-dirs') {
-      ipcRenderer.send('select-dirs', evt.data.key)
+process.once("loaded", () => {
+  window.addEventListener("message", (evt) => {
+    if (evt.data.type === "select-dirs") {
+      ipcRenderer.send("select-dirs", evt.data.key);
     }
-  })
-})
+  });
+});
