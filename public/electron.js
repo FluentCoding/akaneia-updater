@@ -45,7 +45,8 @@ function createWindow() {
     const result = await electron.dialog.showOpenDialog(electron.mainWindow, {
       properties: ['openDirectory']
     })
-    console.log('directories selected', result.filePaths)
+    if (result.filePaths.length === 0)
+      return;
     mainWindow.webContents.send('dir-selected-' + arg, result.filePaths)
   })
 }

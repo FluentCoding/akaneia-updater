@@ -5,7 +5,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CircularProgress, setRef } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 
 import FileSelector from './FileSelector';
 import useSetupStore from '../SetupStore';
@@ -58,6 +58,8 @@ function validateStep(stepIndex, state) {
     case 1:
       if (!state.destFolder)
         return specifcyDest;
+      else
+        return;
     default:
       return undefined;
   }
@@ -98,7 +100,7 @@ const StepContent = ({ stepIndex }) => {
 
 export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
-  const [ loading, setLoading ] = useState(false);
+  const [ loading, setLoading ] = [ useSetupStore(state => state.loading), useSetupStore(state => state.setLoading) ];
   const [ error, setError ] = useState("");
   const [ activeStep, setActiveStep ] = useState(0);
   const steps = getSteps();
@@ -117,10 +119,12 @@ export default function HorizontalLabelPositionBelowStepper() {
         setError(rejection);
       });
     } else {
-      if (!result)
+      if (!result) {
+        setError("");
         setActiveStep((step) => step + 1);
-      else
+      } else {
         setError(result);
+      }
     }
   };
 
