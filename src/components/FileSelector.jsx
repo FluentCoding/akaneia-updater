@@ -7,6 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import Folder from "@material-ui/icons/Folder";
 import useSetupStore from "../SetupStore";
+import { Save } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -37,13 +38,13 @@ const useStyles = makeStyles((theme) => ({
 export default function FileSelector({
   accept,
   placeholder,
-  directory,
+  save,
   multiple,
   file,
   setFile,
   key,
 }) {
-  const [path, setPath] = useState(directory ? file : file?.name); // duplicate for rerender
+  const [path, setPath] = useState(save ? file : file?.name); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
   const selectFile = (e) => {
     var value = e.target.files[0];
@@ -54,7 +55,7 @@ export default function FileSelector({
   const classes = useStyles();
 
   useEffect(() => {
-    if (directory) {
+    if (save) {
       require("electron").ipcRenderer.on(
         "dir-selected-" + key,
         (_event, args) => {
@@ -63,7 +64,7 @@ export default function FileSelector({
         }
       );
     }
-  }, [directory, key, setFile]);
+  }, [save, key, setFile]);
 
   return (
     <Paper className={classes.fileInputField}>
@@ -78,9 +79,9 @@ export default function FileSelector({
       <input
         accept={accept}
         className={classes.input}
-        id={directory ? undefined : "contained-button-file"}
+        id={save ? undefined : "contained-button-file"}
         multiple={multiple}
-        onChange={directory ? undefined : selectFile}
+        onChange={save ? undefined : selectFile}
         type="file"
       />
       <label htmlFor="contained-button-file">
@@ -90,7 +91,7 @@ export default function FileSelector({
           color="primary"
           component="span"
           onClick={() => {
-            if (directory && !loading) {
+            if (save && !loading) {
               window.postMessage({
                 type: "select-dirs",
                 key: key,
@@ -98,7 +99,7 @@ export default function FileSelector({
             }
           }}
         >
-          {directory ? <Folder /> : <InsertDriveFileIcon />}
+          {save ? <Save /> : <InsertDriveFileIcon />}
         </IconButton>
       </label>
     </Paper>
