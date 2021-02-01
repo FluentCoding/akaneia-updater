@@ -83,9 +83,9 @@ const StepContent = ({ stepIndex }) => {
     case 1:
       return (
         <FileSelector
-          placeholder="Select your iso folder"
+          placeholder="Specify the save path"
           key="1"
-          directory
+          save
           file={destFolder}
           setFile={setDestFolder}
         />
