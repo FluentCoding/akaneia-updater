@@ -11,6 +11,8 @@ import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
 import Updater from "../components/Updater";
 import md5File from "md5-file";
+import Logo from "../components/Logo";
+import { useHistory } from 'react-router-dom';
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
 
@@ -105,6 +107,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const state = useSetupStore((state) => state);
+  const history = useHistory();
 
   const handleNext = () => {
     const result = validateStep(activeStep, state);
@@ -132,8 +135,12 @@ export default function HorizontalLabelPositionBelowStepper() {
   };
 
   const handleBack = () => {
-    setError("");
-    setActiveStep((step) => step - 1);
+    if (activeStep === 0) {
+      history.push("/");
+    } else {
+      setError("");
+      setActiveStep((step) => step - 1);
+    }
   };
   const handleReset = () => {
     setActiveStep(0);
@@ -141,6 +148,7 @@ export default function HorizontalLabelPositionBelowStepper() {
 
   return (
     <div className={classes.root}>
+      <Logo />
       <Stepper
         className={classes.stepper}
         activeStep={activeStep}
@@ -177,7 +185,6 @@ export default function HorizontalLabelPositionBelowStepper() {
             </div>
             <div className={classes.navigationButtons}>
               <Button
-                disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.backButton}
               >

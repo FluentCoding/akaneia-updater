@@ -14,7 +14,7 @@ export default function Settings() {
   const setDestFolder = useSetupStore((state) => state.setDestFolder);
 
   return (
-    <Box>
+    <Box style={{textAlign: 'center', width: '100%'}}>
       <Logo />
       <FileSelector
         accept=".iso"
