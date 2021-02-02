@@ -2,11 +2,13 @@ import create from "zustand";
 
 export default create((set) => ({
   isoFile: undefined,
-  destFolder: undefined,
+  destFile: undefined,
   loading: false,
-  error: undefined,
+  disabledNext: false,
+  selectedAsset: undefined,
   setIsoFile: (value) => set({ isoFile: value }),
-  setDestFolder: (value) => set({ destFolder: value }),
+  setDestFile: (value) => set({ destFile: value }),
   setLoading: (value) => set({ loading: value }),
-  setError: (value) => set({ error: value }),
+  setDisabledNext: (value) => set({ disabledNext: value }),
+  setSelectedAsset: (value) => set({ selectedAsset: value })
 }));

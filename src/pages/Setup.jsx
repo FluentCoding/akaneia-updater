@@ -45,11 +45,11 @@ function getSteps() {
   return ["Set SSBM iso", "Set iso folder", "Finish setup"];
 }
 
-function validateStep(stepIndex, state) {
+function validateStep(stepIndex, isoFile, destFile) {
   switch (stepIndex) {
     case 0:
-      if (!state.isoFile) return specifcyISO;
-      return md5File(state.isoFile.path).then((received) => {
+      if (!isoFile) return specifcyISO;
+      return md5File(isoFile.path).then((received) => {
         if (validMD5Hashes.includes(received)) {
           return;
         } else {
@@ -57,7 +57,7 @@ function validateStep(stepIndex, state) {
         }
       });
     case 1:
-      if (!state.destFolder) return specifcyDest;
+      if (!destFile) return specifcyDest;
       else return;
     default:
       return undefined;
@@ -65,12 +65,13 @@ function validateStep(stepIndex, state) {
 }
 
 const StepContent = ({ stepIndex }) => {
-  const isoFile = useSetupStore((state) => state.isoFile);
-  const setIsoFile = useSetupStore((state) => state.setIsoFile);
-  const destFolder = useSetupStore((state) => state.destFolder);
-  const setDestFolder = useSetupStore((state) => state.setDestFolder);
+  const [ isoFile, setIsoFile ] = [useSetupStore((state) => state.isoFile), useSetupStore((state) => state.setIsoFile)];
+  const [ destFile, setDestFile ] = [useSetupStore((state) => state.destFile), useSetupStore((state) => state.setDestFile)];
+  const [ selectedAsset, setSelectedAsset ] = [useSetupStore((state) => state.selectedAsset), useSetupStore((state) => state.setSelectedAsset)];
+  const setDisabledNext = useSetupStore((state) => state.setDisabledNext);
   switch (stepIndex) {
     case 0:
+      setDisabledNext(isoFile === undefined);
       return (
         <FileSelector
           accept=".iso"
@@ -81,17 +82,19 @@ const StepContent = ({ stepIndex }) => {
         />
       );
     case 1:
+      setDisabledNext(destFile === undefined);
       return (
         <FileSelector
           placeholder="Specify the save path"
           key="1"
           save
-          file={destFolder}
-          setFile={setDestFolder}
+          file={destFile}
+          setFile={setDestFile}
         />
       );
     case 2:
-      return <Updater />;
+      setDisabledNext(selectedAsset === undefined);
+      return <Updater selectedAsset={selectedAsset} setSelectedAsset={setSelectedAsset} />;
     default:
       return "Unknown stepIndex";
   }
@@ -99,18 +102,18 @@ const StepContent = ({ stepIndex }) => {
 
 export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
-  const [loading, setLoading] = [
-    useSetupStore((state) => state.loading),
-    useSetupStore((state) => state.setLoading),
-  ];
   const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
-  const state = useSetupStore((state) => state);
+  const [loading, setLoading] = [useSetupStore((state) => state.loading), useSetupStore((state) => state.setLoading)];
+  const isoFile = useSetupStore((state) => state.isoFile);
+  const destFile = useSetupStore((state) => state.destFile);
+  const disabledNext = useSetupStore((state) => state.disabledNext);
+
   const history = useHistory();
 
   const handleNext = () => {
-    const result = validateStep(activeStep, state);
+    const result = validateStep(activeStep, isoFile, destFile);
     if (result instanceof Promise) {
       setLoading(true);
       setError("");
@@ -191,7 +194,7 @@ export default function HorizontalLabelPositionBelowStepper() {
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
-                disabled={loading}
+                disabled={loading || disabledNext}
               >
                 {loading ? (
                   <CircularProgress size={24} color="black" />
