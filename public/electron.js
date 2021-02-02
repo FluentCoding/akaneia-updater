@@ -42,7 +42,7 @@ function createWindow() {
   );
 
   // Hide menu on prod
-  //if (!isDev) mainWindow.setMenu(null);
+  if (!isDev) mainWindow.setMenu(null);
 
   mainWindow.on("closed", () => (mainWindow = null));
 
@@ -71,37 +71,9 @@ app.on("activate", () => {
 });
 
 // Auto Updates
-
-const sendStatusToWindow = (text) => {
-  log.info(text);
-  if (mainWindow) {
-    mainWindow.webContents.send("message", text);
-  }
-};
-
-autoUpdater.on("checking-for-update", () => {
-  log.info("Checking for update...");
+app.on("ready", function () {
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
-autoUpdater.on("update-available", (info) => {
-  sendStatusToWindow("Update available, dowloading...");
-});
-
-autoUpdater.on("update-not-available", (info) => {
-  log.info("Update not available.");
-});
-
-autoUpdater.on("error", (err) => {
-  sendStatusToWindow(`Error in auto-updater: ${err.toString()}`);
-});
-
-autoUpdater.on("update-downloaded", (info) => {
-  sendStatusToWindow("Updater downloaded; will install now");
-});
-
-autoUpdater.on("update-downloaded", (info) => {
-  autoUpdater.quitAndInstall();
-});
-
-// Make the store accessible from the renderer
+// Make the store accessible by the renderer
 Store.initRenderer();

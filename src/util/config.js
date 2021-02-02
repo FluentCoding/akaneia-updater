@@ -2,7 +2,7 @@ import Store from "electron-store";
 
 const schema = {
   currentVersion: {
-    type: "number",
+    type: "string",
   },
   githubRemoteUrl: {
     type: "string",

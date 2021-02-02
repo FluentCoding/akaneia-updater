@@ -1,6 +1,6 @@
 {
   "name": "akaneia-updater",
-  "version": "0.1.0",
+  "version": "0.2.3",
   "author": "Ananas",
   "contributors": [
     "FluentCoding"
@@ -11,17 +11,40 @@
   "license": "MIT",
   "main": "public/electron.js",
   "build": {
-    "appId": "org.akaneia.akaneia-updater",
+    "appId": "com.github.akaneia.akaneia-updater",
     "productName": "Akaneia Updater",
-    "mac": {
-      "category": "public.app-category.games"
-    },
+    "artifactName": "Akaneia-Updater-${version}-${os}.${ext}",
     "files": [
       "bin",
       "public",
       "build",
       "node_modules"
-    ]
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "artifactName": "Akaneia-Updater-Setup-${version}.${ext}",
+      "perMachine": true
+    },
+    "mac": {
+      "category": "public.app-category.games",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Games"
+    },
+    "appImage": {
+      "artifactName": "Akaneia-Updater-${version}-x86_64.${ext}"
+    }
   },
   "homepage": "./",
   "dependencies": {
@@ -58,7 +81,7 @@
     "start": "concurrently -s first -k -n \"REACT,ELECTRON\" -c \"blue.bold,magenta.bold\" \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "gh-publish": "electron-builder -p always",
+    "gh-publish": "yarn react-build && electron-builder -p always",
     "format": "prettier --write src/ public/"
   },
   "eslintConfig": {
