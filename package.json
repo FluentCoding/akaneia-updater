@@ -40,7 +40,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "gh-publish": "yarn react-build && electron-builder -p always",
-    "format": "prettier --write src/ public/"
+    "format": "prettier --write src/ public/ *.yml *.json"
   },
   "eslintConfig": {
     "extends": [
