@@ -1,0 +1,39 @@
+appId: com.github.akaneia.akaneia-updater
+productName: Akaneia Updater
+artifactName: Akaneia-Updater-${version}-${os}.${ext}
+
+files:
+  - build
+
+win:
+  publisherName: Akaneia
+  icon: ./resources/icon.ico
+  target:
+    - nsis
+    - portable
+nsis:
+  artifactName: Akaneia-Updater-${version}-${os}.${ext}
+  perMachine: true
+  installerIcon: ./resources/icon.ico
+
+mac:
+  category: public.app-category.games
+  icon: ./resources/icon.icns
+  target:
+    - dmg
+    - zip
+dmg:
+  artifactName: Akaneia-Updater-${version}.${ext},
+  icon: ./resources/icon.icns
+
+linux:
+  target:
+    - AppImage
+  category: Games
+
+appImage:
+  artifactName: Akaneia-Updater-${version}-x86_64.${ext}
+
+directories:
+  buildResources: ressources
+  output: dist
