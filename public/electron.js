@@ -42,7 +42,7 @@ function createWindow() {
   );
 
   // Hide menu on prod
-  //if (!isDev) mainWindow.setMenu(null);
+  if (!isDev) mainWindow.setMenu(null);
 
   mainWindow.on("closed", () => (mainWindow = null));
 
@@ -72,7 +72,7 @@ app.on("activate", () => {
 
 // Auto Updates
 
-app.on('ready', function()  {
+app.on("ready", function () {
   autoUpdater.checkForUpdatesAndNotify();
 });
 
@@ -81,7 +81,7 @@ autoUpdater.on("update-available", (info) => {
     title: "Update available !",
     message: "Downloading... Please do not close the program",
     type: "info",
-  }
+  };
   electron.dialog.showMessageBox(mainWindow, options);
 });
 
