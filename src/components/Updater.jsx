@@ -3,7 +3,6 @@ import { Octokit } from "@octokit/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Typography from "@material-ui/core/Typography";
 import path from "path";
 
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ShowUpdate({ isoPath, destFolder }) {
-  const [version, setVersion] = useState(undefined);
+  //const [version, setVersion] = useState(undefined);
   const [assets, setAssets] = useState(undefined);
   const componentIsMounted = useRef(true);
 
@@ -40,7 +39,7 @@ export default function ShowUpdate({ isoPath, destFolder }) {
         );
         const data = asyncResponse.data;
         if (componentIsMounted.current) {
-          setVersion(data.tag_name);
+          //setVersion(data.tag_name);
           setAssets(data.assets);
           console.log(data.assets[0]);
         }

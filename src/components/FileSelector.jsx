@@ -5,7 +5,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
 import InputBase from "@material-ui/core/InputBase";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import Folder from "@material-ui/icons/Folder";
 import useSetupStore from "../SetupStore";
 import { Save } from "@material-ui/icons";
 
