@@ -12,7 +12,7 @@ win:
     - nsis
     - portable
 nsis:
-  artifactName: Akaneia-Updater-${version}-${os}.${ext}
+  artifactName: Akaneia-Updater-Setup-${version}.${ext}
   perMachine: true
   installerIcon: ./resources/icon.ico
 
