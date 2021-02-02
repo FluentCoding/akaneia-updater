@@ -58,8 +58,10 @@ export default function FileSelector({
       require("electron").ipcRenderer.on(
         "dir-selected-" + key,
         (_event, args) => {
+          var path = require("path");
+
+          setPath(path.basename(args));
           setFile(args);
-          setPath(args);
         }
       );
     }
