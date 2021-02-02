@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Octokit } from "@octokit/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Box from "@material-ui/core/Box";
@@ -31,7 +31,7 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
           }
         );
         const data = asyncResponse.data;
-        console.log(data.assets)
+        console.log(data.assets);
         setAssets(data.assets);
       } catch (err) {
         console.error(err);
@@ -54,12 +54,12 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
               color="primary"
               variant="contained"
               style={{ marginRight: 10 }}
-              startIcon={selectedAsset === key ? <CheckBox /> : <CheckBoxOutlineBlank />}
+              startIcon={
+                selectedAsset === key ? <CheckBox /> : <CheckBoxOutlineBlank />
+              }
               onClick={() => {
-                if (selectedAsset === key)
-                  setSelectedAsset(undefined);
-                else
-                  setSelectedAsset(key);
+                if (selectedAsset === key) setSelectedAsset(undefined);
+                else setSelectedAsset(key);
                 console.log(asset.browser_download_url);
               }}
             >

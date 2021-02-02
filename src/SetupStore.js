@@ -10,5 +10,5 @@ export default create((set) => ({
   setDestFile: (value) => set({ destFile: value }),
   setLoading: (value) => set({ loading: value }),
   setDisabledNext: (value) => set({ disabledNext: value }),
-  setSelectedAsset: (value) => set({ selectedAsset: value })
+  setSelectedAsset: (value) => set({ selectedAsset: value }),
 }));
