@@ -71,18 +71,8 @@ app.on("activate", () => {
 });
 
 // Auto Updates
-
 app.on("ready", function () {
   autoUpdater.checkForUpdatesAndNotify();
-});
-
-autoUpdater.on("update-available", (info) => {
-  const options = {
-    title: "Update available !",
-    message: "Downloading... Please do not close the program",
-    type: "info",
-  };
-  electron.dialog.showMessageBox(mainWindow, options);
 });
 
 // Make the store accessible by the renderer
