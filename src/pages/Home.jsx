@@ -1,12 +1,12 @@
-import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Fab from "@material-ui/core/Fab";
-import SettingsIcon from "@material-ui/icons/Settings";
+import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Link } from "react-router-dom";
 
 import Logo from "../components/Logo";
+import BuildCardGrid from "../components/BuildCardGrid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,19 +31,18 @@ export default function Home() {
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <Logo />
+          <h1>Welcome back !</h1>
         </Grid>
         <Grid item>
-          <Link className={classes.setupButton} to="/setup">
-            <Button variant="contained" color="primary">
-              SETUP
-            </Button>
-          </Link>
+          <h3>Your builds:</h3>
         </Grid>
         <Grid item>
-          <Link to="/settings" className={classes.fab}>
+          <BuildCardGrid />
+        </Grid>
+        <Grid item>
+          <Link to="/setup" className={classes.fab}>
             <Fab color="primary">
-              <SettingsIcon />
+              <AddIcon />
             </Fab>
           </Link>
         </Grid>
