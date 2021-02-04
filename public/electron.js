@@ -33,6 +33,7 @@ function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
+      webSecurity: false
     },
   });
   mainWindow.loadURL(
@@ -54,7 +55,6 @@ function createWindow() {
       }
     );
     if (!result) return;
-    console.log(result);
     mainWindow.webContents.send("dir-selected-" + arg, result);
   });
 }

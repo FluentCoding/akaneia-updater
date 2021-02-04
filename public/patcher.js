@@ -1,24 +1,23 @@
-(function () {
-  window.RomPatcher = function () {};
-  var RomPatcher = window.RomPatcher;
+/* FORKED VERSION OF ROMPATCHER LOGIC - FluentCoding 2021 */
 
-  RomPatcher.applyPatch = function (patchBuffer, romBuffer) {
-    var patchFile = new MarcFile(patchBuffer);
-    var romFile = new MarcFile(romBuffer);
-    if (patchFile && romFile) {
-      var patch = parseVCDIFF(patchFile);
-      try {
-        var newFile = patch.apply(romFile, false);
-        return newFile._u8array;
-      } catch (e) {
-        console.log("Failed!");
-        return undefined;
-      }
-    } else {
+RomPatcher = function(){};
+
+RomPatcher.applyPatch = function (patchBuffer, romBuffer) {
+  var patchFile = new MarcFile(patchBuffer);
+  var romFile = new MarcFile(romBuffer);
+  if (patchFile && romFile) {
+    var patch = parseVCDIFF(patchFile);
+    try {
+      var newFile = patch.apply(romFile, false);
+      return newFile._u8array;
+    } catch (e) {
+      console.log("Failed!");
       return undefined;
     }
-  };
-})();
+  } else {
+    return undefined;
+  }
+};
 
 /* MODDED VERSION OF MarcFile.js v20181020 - Marc Robledo 2014-2018 - http://www.marcrobledo.com/license */
 

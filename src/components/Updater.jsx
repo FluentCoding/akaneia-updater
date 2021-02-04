@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Octokit } from "@octokit/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Box from "@material-ui/core/Box";
@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import path from "path";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
+import useSetupStore from '../SetupStore'
 
 const useStyles = makeStyles((theme) => ({
   instructions: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
   //const [version, setVersion] = useState(undefined);
   const [assets, setAssets] = useState(undefined);
+  const loading = useSetupStore(state => state.loading);
 
   useEffect(() => {
     async function fetchReleases() {
@@ -30,9 +32,7 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
             repo: "akaneia-build",
           }
         );
-        const data = asyncResponse.data;
-        console.log(data.assets)
-        setAssets(data.assets);
+        setAssets(asyncResponse.data.assets);
       } catch (err) {
         console.error(err);
       }
@@ -49,18 +49,18 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
           <Typography className={classes.instructions}>
             Choose the version you want to use
           </Typography>
-          {assets.map((asset, key) => (
+          {assets.map((asset) => (
             <Button
+              disabled={loading}
               color="primary"
               variant="contained"
               style={{ marginRight: 10 }}
-              startIcon={selectedAsset === key ? <CheckBox /> : <CheckBoxOutlineBlank />}
+              startIcon={selectedAsset === asset.browser_download_url ? <CheckBox /> : <CheckBoxOutlineBlank />}
               onClick={() => {
-                if (selectedAsset === key)
+                if (selectedAsset === asset.browser_download_url)
                   setSelectedAsset(undefined);
                 else
-                  setSelectedAsset(key);
-                console.log(asset.browser_download_url);
+                  setSelectedAsset(asset.browser_download_url);
               }}
             >
               {path.basename(asset.name, ".xdelta")}

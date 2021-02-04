@@ -7,6 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import useSetupStore from "../SetupStore";
 import { Save } from "@material-ui/icons";
+import pathUtil from 'path';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -43,7 +44,7 @@ export default function FileSelector({
   setFile,
   key,
 }) {
-  const [path, setPath] = useState(save ? file : file?.name); // duplicate for rerender
+  const [path, setPath] = useState(save ? (file && pathUtil.basename(file)) : file?.name); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
   const selectFile = (e) => {
     var value = e.target.files[0];
@@ -58,9 +59,7 @@ export default function FileSelector({
       require("electron").ipcRenderer.on(
         "dir-selected-" + key,
         (_event, args) => {
-          var path = require("path");
-
-          setPath(path.basename(args));
+          setPath(pathUtil.basename(args));
           setFile(args);
         }
       );

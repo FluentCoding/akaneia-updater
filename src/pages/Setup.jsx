@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -6,6 +6,9 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import fs from 'fs';
+import fetch from 'node-fetch';
+import { useSnackbar } from 'notistack';
 
 import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
@@ -16,8 +19,6 @@ import { useHistory } from "react-router-dom";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
 
-const specifcyISO = "You have to specify an ISO!";
-const specifcyDest = "You have to specify a destination folder!";
 const invalidMD5 =
   "This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02";
 
@@ -45,10 +46,10 @@ function getSteps() {
   return ["Set SSBM iso", "Set iso folder", "Finish setup"];
 }
 
-function validateStep(stepIndex, isoFile, destFile) {
+function validateStep(stepIndex, isoFile, destFile, assetDownloadUrl, enqueueSnackbar, closeSnackbar) {
   switch (stepIndex) {
     case 0:
-      if (!isoFile) return specifcyISO;
+      if (!isoFile) return "Error";
       return md5File(isoFile.path).then((received) => {
         if (validMD5Hashes.includes(received)) {
           return;
@@ -57,8 +58,49 @@ function validateStep(stepIndex, isoFile, destFile) {
         }
       });
     case 1:
-      if (!destFile) return specifcyDest;
-      else return;
+      if (!destFile) return "Error";
+      return;
+    case 2:
+      if (!assetDownloadUrl) return "Error";
+
+      var lastSnackbar = undefined;
+      const showInfo = (message) => enqueueSnackbar(message, { variant: 'info', autoHideDuration: null, anchorOrigin: {horizontal: 'right', vertical: 'top'}, action: (key) => { lastSnackbar = key; }});
+
+      return new Promise(async (resolve, reject) => {
+        try {
+          showInfo("Downloading patch file...");
+          const res = await fetch(assetDownloadUrl, {redirect: "follow", headers: {
+            "Content-Type": "application/octet-stream"
+          }});
+          showInfo("Reading patch file...");
+          res.arrayBuffer().then(deltaBuffer => {
+            showInfo("Reading game file...");
+            fs.readFile(isoFile.path, (err, isoFileBuffer) => {
+              showInfo("Patching the game...");
+              var worker = new Worker('../worker.js');
+  
+              worker.addEventListener('message', (e) => {
+                showInfo("Writing into new game file...");
+                try {
+                  fs.writeFile(destFile, new Uint8Array(e.data), () => {
+                    closeSnackbar(lastSnackbar);
+                    resolve();
+                  });
+                } catch(error) {
+                  reject(error);
+                }
+              });
+
+              worker.postMessage({
+                deltaBuffer: deltaBuffer,
+                isoFileBuffer: isoFileBuffer
+              });
+            });
+          });
+        } catch (error) {
+          reject(error);
+        }
+      });
     default:
       return undefined;
   }
@@ -108,12 +150,14 @@ export default function HorizontalLabelPositionBelowStepper() {
   const [loading, setLoading] = [useSetupStore((state) => state.loading), useSetupStore((state) => state.setLoading)];
   const isoFile = useSetupStore((state) => state.isoFile);
   const destFile = useSetupStore((state) => state.destFile);
+  const selectedAsset = useSetupStore((state) => state.selectedAsset);
   const disabledNext = useSetupStore((state) => state.disabledNext);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const history = useHistory();
 
   const handleNext = () => {
-    const result = validateStep(activeStep, isoFile, destFile);
+    const result = validateStep(activeStep, isoFile, destFile, selectedAsset, enqueueSnackbar, closeSnackbar);
     if (result instanceof Promise) {
       setLoading(true);
       setError("");
@@ -124,7 +168,7 @@ export default function HorizontalLabelPositionBelowStepper() {
         },
         (rejection) => {
           setLoading(false);
-          setError(rejection);
+          setError(typeof rejection === "string" ? rejection : "Error");
         }
       );
     } else {
@@ -187,7 +231,7 @@ export default function HorizontalLabelPositionBelowStepper() {
               {error}
             </div>
             <div className={classes.navigationButtons}>
-              <Button onClick={handleBack} className={classes.backButton}>
+              <Button onClick={handleBack} className={classes.backButton} disabled={loading}>
                 Back
               </Button>
               <Button
