@@ -1,10 +1,4 @@
-
-<center>
-  <img src="resources/icon.svg" style="height:6rem;">
-  <h1>
-    Akaneia Updater
-  </h1>
-</center>
+# Akaneia Updater
 
 ## F.A.Q.
 
