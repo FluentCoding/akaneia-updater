@@ -23,7 +23,7 @@ mac:
     - dmg
     - zip
 dmg:
-  artifactName: Akaneia-Updater-${version}.${ext},
+  artifactName: Akaneia-Updater-${version}.${ext}
   icon: ./resources/icon.icns
 
 linux:

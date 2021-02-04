@@ -107,9 +107,18 @@ function validateStep(stepIndex, isoFile, destFile, assetDownloadUrl, enqueueSna
 }
 
 const StepContent = ({ stepIndex }) => {
-  const [ isoFile, setIsoFile ] = [useSetupStore((state) => state.isoFile), useSetupStore((state) => state.setIsoFile)];
-  const [ destFile, setDestFile ] = [useSetupStore((state) => state.destFile), useSetupStore((state) => state.setDestFile)];
-  const [ selectedAsset, setSelectedAsset ] = [useSetupStore((state) => state.selectedAsset), useSetupStore((state) => state.setSelectedAsset)];
+  const [isoFile, setIsoFile] = [
+    useSetupStore((state) => state.isoFile),
+    useSetupStore((state) => state.setIsoFile),
+  ];
+  const [destFile, setDestFile] = [
+    useSetupStore((state) => state.destFile),
+    useSetupStore((state) => state.setDestFile),
+  ];
+  const [selectedAsset, setSelectedAsset] = [
+    useSetupStore((state) => state.selectedAsset),
+    useSetupStore((state) => state.setSelectedAsset),
+  ];
   const setDisabledNext = useSetupStore((state) => state.setDisabledNext);
   switch (stepIndex) {
     case 0:
@@ -136,7 +145,12 @@ const StepContent = ({ stepIndex }) => {
       );
     case 2:
       setDisabledNext(selectedAsset === undefined);
-      return <Updater selectedAsset={selectedAsset} setSelectedAsset={setSelectedAsset} />;
+      return (
+        <Updater
+          selectedAsset={selectedAsset}
+          setSelectedAsset={setSelectedAsset}
+        />
+      );
     default:
       return "Unknown stepIndex";
   }
@@ -147,7 +161,10 @@ export default function HorizontalLabelPositionBelowStepper() {
   const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
-  const [loading, setLoading] = [useSetupStore((state) => state.loading), useSetupStore((state) => state.setLoading)];
+  const [loading, setLoading] = [
+    useSetupStore((state) => state.loading),
+    useSetupStore((state) => state.setLoading),
+  ];
   const isoFile = useSetupStore((state) => state.isoFile);
   const destFile = useSetupStore((state) => state.destFile);
   const selectedAsset = useSetupStore((state) => state.selectedAsset);
