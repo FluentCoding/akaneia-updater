@@ -79,7 +79,7 @@ export default function FileSelector({
       <input
         accept={accept}
         className={classes.input}
-        id={save ? undefined : "contained-button-file"}
+        id={(save || loading) ? undefined : "contained-button-file"}
         multiple={multiple}
         onChange={save ? undefined : selectFile}
         type="file"
@@ -90,6 +90,7 @@ export default function FileSelector({
           variant="contained"
           color="primary"
           component="span"
+          disabled={loading}
           onClick={() => {
             if (save && !loading) {
               window.postMessage({
