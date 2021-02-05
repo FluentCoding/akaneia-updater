@@ -12,7 +12,7 @@ extraFiles:
       - "**/*"
 
 win:
-  publisherName: Akaneia
+  verifyUpdateCodeSignature: false
   icon: ./resources/icon.ico
   target:
     - nsis
