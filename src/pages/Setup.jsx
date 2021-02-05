@@ -72,7 +72,7 @@ function validateStep(
       if (!destFile) return "Error";
 
       // check if dest path is already used by other tracked isos
-      if (store.get("trackedIsos").find(trackedIso => destFile === trackedIso.destPath)) {
+      if (store.has("trackedIsos") && store.get("trackedIsos").find(trackedIso => destFile === trackedIso.destPath)) {
         return "You're already using this ISO for tracking!";
       }
 
