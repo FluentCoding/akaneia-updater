@@ -1,6 +1,6 @@
 /* FORKED VERSION OF ROMPATCHER LOGIC - FluentCoding 2021 */
 
-RomPatcher = function(){};
+RomPatcher = function () {};
 
 RomPatcher.applyPatch = function (patchBuffer, romBuffer) {
   var patchFile = new MarcFile(patchBuffer);

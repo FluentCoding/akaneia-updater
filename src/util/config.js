@@ -2,31 +2,31 @@ import Store from "electron-store";
 
 const schema = {
   vanillaIsoPath: {
-    type: "string"
+    type: "string",
   },
   trackedIsos: {
     type: "array",
     properties: {
       name: {
-        type: "string"
+        type: "string",
       },
       version: {
-        type: "number"
+        type: "number",
       },
       destPath: {
-        type: "string"
+        type: "string",
       },
       owner: {
-        type: "string"
+        type: "string",
       },
       repo: {
-        type: "string"
+        type: "string",
       },
       assetName: {
-        type: "string"
-      }
-    }
-  }
+        type: "string",
+      },
+    },
+  },
 };
 
 export default new Store({ schema });

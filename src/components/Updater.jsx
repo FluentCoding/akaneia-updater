@@ -5,8 +5,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import path from "path";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
-import useSetupStore from '../SetupStore';
-import { fetchReleases } from '../util/GithubUtil';
+import useSetupStore from "../SetupStore";
+import { fetchReleases } from "../util/GithubUtil";
 
 const useStyles = makeStyles((theme) => ({
   instructions: {
@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
-  const setVersion = useSetupStore(state => state.setVersion);
+  const setVersion = useSetupStore((state) => state.setVersion);
   const [assets, setAssets] = useState(undefined);
-  const loading = useSetupStore(state => state.loading);
+  const loading = useSetupStore((state) => state.loading);
 
-  useEffect(async() => {
+  useEffect(async () => {
     const result = await fetchReleases();
 
     setVersion(result.version);
@@ -39,28 +39,36 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
           </Typography>
           {assets.map((asset) => {
             var assetDetails = path.parse(asset.name);
-            if (assetDetails.ext !== ".xdelta")
-              return;
+            if (assetDetails.ext !== ".xdelta") return;
 
             var assetName = assetDetails.name;
 
             return (
-            <Button
-              disabled={loading}
-              color="primary"
-              variant="contained"
-              style={{ marginRight: 10 }}
-              startIcon={selectedAsset?.downloadUrl === asset.browser_download_url ? <CheckBox /> : <CheckBoxOutlineBlank />}
-              onClick={() => {
-                if (selectedAsset?.downloadUrl === asset.browser_download_url)
-                  setSelectedAsset(undefined);
-                else
-                  setSelectedAsset({downloadUrl: asset.browser_download_url, name: assetName});
-              }}
-            >
-              {assetName}
-            </Button>
-            )
+              <Button
+                disabled={loading}
+                color="primary"
+                variant="contained"
+                style={{ marginRight: 10 }}
+                startIcon={
+                  selectedAsset?.downloadUrl === asset.browser_download_url ? (
+                    <CheckBox />
+                  ) : (
+                    <CheckBoxOutlineBlank />
+                  )
+                }
+                onClick={() => {
+                  if (selectedAsset?.downloadUrl === asset.browser_download_url)
+                    setSelectedAsset(undefined);
+                  else
+                    setSelectedAsset({
+                      downloadUrl: asset.browser_download_url,
+                      name: assetName,
+                    });
+                }}
+              >
+                {assetName}
+              </Button>
+            );
           })}
         </>
       )}

@@ -33,7 +33,7 @@ function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
-      webSecurity: false
+      webSecurity: false,
     },
   });
   mainWindow.loadURL(

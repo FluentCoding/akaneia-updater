@@ -6,8 +6,8 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { useSnackbar } from 'notistack';
-import { patchROM } from '../util/PatchingUtil'
+import { useSnackbar } from "notistack";
+import { patchROM } from "../util/PatchingUtil";
 
 import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
@@ -15,7 +15,7 @@ import Updater from "../components/Updater";
 import md5File from "md5-file";
 import Logo from "../components/Logo";
 import { useHistory } from "react-router-dom";
-import store from '../util/config';
+import store from "../util/config";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
 
@@ -46,7 +46,16 @@ function getSteps() {
   return ["Set SSBM iso", "Set iso folder", "Finish setup"];
 }
 
-function validateStep(stepIndex, isoFile, destFile, asset, version, clear, enqueueSnackbar, closeSnackbar) {
+function validateStep(
+  stepIndex,
+  isoFile,
+  destFile,
+  asset,
+  version,
+  clear,
+  enqueueSnackbar,
+  closeSnackbar
+) {
   switch (stepIndex) {
     case 0:
       if (!isoFile) return "Error";
@@ -62,7 +71,16 @@ function validateStep(stepIndex, isoFile, destFile, asset, version, clear, enque
       if (!destFile) return "Error";
       return;
     case 2:
-      return patchROM(asset, isoFile, destFile, version, clear, store, enqueueSnackbar, closeSnackbar);
+      return patchROM(
+        asset,
+        isoFile,
+        destFile,
+        version,
+        clear,
+        store,
+        enqueueSnackbar,
+        closeSnackbar
+      );
     default:
       return undefined;
   }
@@ -139,7 +157,16 @@ export default function Setup() {
   const history = useHistory();
 
   const handleNext = () => {
-    const result = validateStep(activeStep, isoFile, destFile, selectedAsset, version, clear, enqueueSnackbar, closeSnackbar);
+    const result = validateStep(
+      activeStep,
+      isoFile,
+      destFile,
+      selectedAsset,
+      version,
+      clear,
+      enqueueSnackbar,
+      closeSnackbar
+    );
     if (result instanceof Promise) {
       setLoading(true);
       setError("");
@@ -222,7 +249,13 @@ export default function Setup() {
               {error}
             </div>
             <div className={classes.navigationButtons}>
-              <Button onClick={handleBack} className={classes.backButton} disabled={loading || (activeStep === 0 && !store.get("trackedIsos").length)}>
+              <Button
+                onClick={handleBack}
+                className={classes.backButton}
+                disabled={
+                  loading || (activeStep === 0 && !store.get("trackedIsos"))
+                }
+              >
                 Back
               </Button>
               <Button

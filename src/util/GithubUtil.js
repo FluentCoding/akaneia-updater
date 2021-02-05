@@ -1,12 +1,12 @@
 import { Octokit } from "@octokit/core";
 
-export const fetchReleases = async() => {
+export const fetchReleases = async () => {
   try {
     const octokit = new Octokit();
     const asyncResponse = await octokit.request(
       "GET /repos/{owner}/{repo}/releases/latest",
       {
-        owner: "ananas-dev",
+        owner: "akaneia",
         repo: "akaneia-build",
       }
     );
@@ -14,9 +14,9 @@ export const fetchReleases = async() => {
     const data = asyncResponse.data;
     return {
       version: data.tag_name,
-      assets: data.assets
-    }
+      assets: data.assets,
+    };
   } catch (err) {
     console.error(err);
   }
-}
+};

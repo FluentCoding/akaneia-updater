@@ -7,7 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import useSetupStore from "../SetupStore";
 import { Save } from "@material-ui/icons";
-import pathUtil from 'path';
+import pathUtil from "path";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -44,7 +44,7 @@ export default function FileSelector({
   setFile,
   key,
 }) {
-  const [path, setPath] = useState((file && pathUtil.basename(file))); // duplicate for rerender
+  const [path, setPath] = useState(file && pathUtil.basename(file)); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
   const selectFile = (e) => {
     var value = e.target.files[0];
@@ -79,7 +79,7 @@ export default function FileSelector({
       <input
         accept={accept}
         className={classes.input}
-        id={(save || loading) ? undefined : "contained-button-file"}
+        id={save || loading ? undefined : "contained-button-file"}
         multiple={multiple}
         onChange={save ? undefined : selectFile}
         type="file"
