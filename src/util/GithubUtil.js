@@ -6,7 +6,7 @@ export const fetchReleases = async () => {
     const asyncResponse = await octokit.request(
       "GET /repos/{owner}/{repo}/releases/latest",
       {
-        owner: "akaneia",
+        owner: "ananas-dev",
         repo: "akaneia-build",
       }
     );
