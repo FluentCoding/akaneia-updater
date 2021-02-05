@@ -61,45 +61,48 @@ export const patchROM = (
         return fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (data) => {
           showInfo("Patching game...");
           const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
-          execFile(
-            xdeltaPath,
-            ["-dfs", isoFile, assetPath, destFile],
-            (err, stdout, stderr) => {
-              if (err) {
-                console.log(err);
-                console.log(stderr);
-                enqueueSnackbar &&
-                enqueueSnackbar("Patch failed!", {
-                  variant: "error",
-                  autoHideDuration: null,
-                  anchorOrigin: { horizontal: "right", vertical: "top" },
-                  action: (key) => {
-                    lastSnackbar = key;
-                  },
-                });
-              } else {
-                showInfo("Patch succeed!");
-                let trackedIsos = store.get("trackedIsos", []);
-                const newTrackedIso = {
-                  name: "Akaneia Build",
-                  version: version,
-                  destPath: destFile,
-                  owner: "akaneia",
-                  repo: "akaneia-build",
-                  assetName: asset.name,
-                };
-                if (index !== undefined) {
-                  trackedIsos[index] = newTrackedIso;
+          try {
+            execFile(
+              xdeltaPath,
+              ["-dfs", isoFile, assetPath, destFile],
+              (err, stdout, stderr) => {
+                closeSnackbar();
+                if (err) {
+                  console.log(err);
+                  console.log(stderr);
+                  enqueueSnackbar &&
+                  enqueueSnackbar("Patch failed!", {
+                    variant: "error",
+                    anchorOrigin: { horizontal: "right", vertical: "top" }
+                  });
                 } else {
-                  trackedIsos.push(newTrackedIso);
+                  enqueueSnackbar("Patch succeed!", {
+                    variant: "success",
+                    anchorOrigin: { horizontal: "right", vertical: "top" }
+                  });
+                  let trackedIsos = store.get("trackedIsos", []);
+                  const newTrackedIso = {
+                    name: "Akaneia Build",
+                    version: version,
+                    destPath: destFile,
+                    owner: "akaneia",
+                    repo: "akaneia-build",
+                    assetName: asset.name,
+                  };
+                  if (index !== undefined) {
+                    trackedIsos[index] = newTrackedIso;
+                  } else {
+                    trackedIsos.push(newTrackedIso);
+                  }
+                  store.set("trackedIsos", trackedIsos);
                 }
-                store.set("trackedIsos", trackedIsos);
+                clear();
+                resolve();
               }
-              clear();
-              resolve();
-              closeSnackbar();
-            }
-          );
+            );
+          } catch(error) {
+            closeSnackbar();
+          }
         });
       });
     } catch (error) {
