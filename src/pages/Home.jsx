@@ -39,28 +39,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const history = useHistory();
-  if (!store.get("trackedIsos")?.length) history.push("/setup");
-
+  
   const classes = useStyles();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const vanillaIsoPath = store.get("vanillaIsoPath");
+    if (!store.get("trackedIsos")?.length) 
+      history.push("/setup");
+    else {
+      const vanillaIsoPath = store.get("vanillaIsoPath");
 
-    if (!vanillaIsoPath) {
-      enqueueSnackbar("Please specify a vanilla iso in the settings!", {
-        variant: "error",
-        anchorOrigin: { horizontal: "right", vertical: "top" },
-      });
-    } else if (!fs.existsSync(store.get("vanillaIsoPath"))) {
-      enqueueSnackbar(
-        "The specified vanilla iso doesn't exist anymore! Please choose one in the settings!",
-        {
+      if (!vanillaIsoPath) {
+        enqueueSnackbar("Please specify a vanilla iso in the settings!", {
           variant: "error",
           anchorOrigin: { horizontal: "right", vertical: "top" },
-        }
-      );
+        });
+      } else if (!fs.existsSync(store.get("vanillaIsoPath"))) {
+        enqueueSnackbar(
+          "The specified vanilla iso doesn't exist anymore! Please choose one in the settings!",
+          {
+            variant: "error",
+            anchorOrigin: { horizontal: "right", vertical: "top" },
+          }
+        );
+      }
     }
   }, []);
 
