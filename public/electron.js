@@ -57,7 +57,6 @@ function createWindow() {
             extensions: ["iso"],
           },
         ],
-        defaultPath: ".iso",
       }
     );
     if (!result) return;
