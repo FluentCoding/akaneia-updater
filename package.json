@@ -1,9 +1,9 @@
 {
   "name": "akaneia-updater",
   "version": "0.9.9",
-  "author": "Ananas",
+  "author": "FluentCoding",
   "contributors": [
-    "FluentCoding"
+    "Ananas"
   ],
   "description": "An updater for the Akainea build",
   "private": true,
