@@ -4,14 +4,12 @@ artifactName: Akaneia-Updater-${version}-${os}.${ext}
 
 files:
   - build
-  - public
 
 win:
   publisherName: Akaneia
   icon: ./resources/icon.ico
   target:
     - nsis
-    - portable
 nsis:
   artifactName: Akaneia-Updater-Setup-${version}.${ext}
   perMachine: true
