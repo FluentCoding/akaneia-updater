@@ -4,8 +4,9 @@ import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import store from '../util/config';
 
-import Logo from "../components/Logo";
 import BuildCardGrid from "../components/BuildCardGrid";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,12 +27,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  const history = useHistory();
 
+  if (!store.get("trackedIsos").length)
+    history.push("/setup");
   return (
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <h1>Welcome back !</h1>
+          <h1>Akaneia Updater</h1>
         </Grid>
         <Grid item>
           <h3>Your builds:</h3>

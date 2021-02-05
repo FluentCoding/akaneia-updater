@@ -44,12 +44,12 @@ export default function FileSelector({
   setFile,
   key,
 }) {
-  const [path, setPath] = useState(save ? (file && pathUtil.basename(file)) : file?.name); // duplicate for rerender
+  const [path, setPath] = useState((file && pathUtil.basename(file))); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
   const selectFile = (e) => {
     var value = e.target.files[0];
-    setPath(value.name);
-    setFile(value);
+    setPath(pathUtil.basename(value.name));
+    setFile(value.name);
   };
 
   const classes = useStyles();

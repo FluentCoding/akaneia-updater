@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -6,9 +6,8 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import fs from 'fs';
-import fetch from 'node-fetch';
 import { useSnackbar } from 'notistack';
+import { patchROM } from '../util/PatchingUtil'
 
 import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
@@ -16,6 +15,7 @@ import Updater from "../components/Updater";
 import md5File from "md5-file";
 import Logo from "../components/Logo";
 import { useHistory } from "react-router-dom";
+import store from '../util/config';
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
 
@@ -46,12 +46,13 @@ function getSteps() {
   return ["Set SSBM iso", "Set iso folder", "Finish setup"];
 }
 
-function validateStep(stepIndex, isoFile, destFile, assetDownloadUrl, enqueueSnackbar, closeSnackbar) {
+function validateStep(stepIndex, isoFile, destFile, asset, version, clear, enqueueSnackbar, closeSnackbar) {
   switch (stepIndex) {
     case 0:
       if (!isoFile) return "Error";
-      return md5File(isoFile.path).then((received) => {
+      return md5File(isoFile).then((received) => {
         if (validMD5Hashes.includes(received)) {
+          store.set("vanillaIsoPath", isoFile);
           return;
         } else {
           return Promise.reject(invalidMD5);
@@ -61,46 +62,7 @@ function validateStep(stepIndex, isoFile, destFile, assetDownloadUrl, enqueueSna
       if (!destFile) return "Error";
       return;
     case 2:
-      if (!assetDownloadUrl) return "Error";
-
-      var lastSnackbar = undefined;
-      const showInfo = (message) => enqueueSnackbar(message, { variant: 'info', autoHideDuration: null, anchorOrigin: {horizontal: 'right', vertical: 'top'}, action: (key) => { lastSnackbar = key; }});
-
-      return new Promise(async (resolve, reject) => {
-        try {
-          showInfo("Downloading patch file...");
-          const res = await fetch(assetDownloadUrl, {redirect: "follow", headers: {
-            "Content-Type": "application/octet-stream"
-          }});
-          showInfo("Reading patch file...");
-          res.arrayBuffer().then(deltaBuffer => {
-            showInfo("Reading game file...");
-            fs.readFile(isoFile.path, (err, isoFileBuffer) => {
-              showInfo("Patching the game...");
-              var worker = new Worker('../worker.js');
-  
-              worker.addEventListener('message', (e) => {
-                showInfo("Writing into new game file...");
-                try {
-                  fs.writeFile(destFile, new Uint8Array(e.data), () => {
-                    closeSnackbar(lastSnackbar);
-                    resolve();
-                  });
-                } catch(error) {
-                  reject(error);
-                }
-              });
-
-              worker.postMessage({
-                deltaBuffer: deltaBuffer,
-                isoFileBuffer: isoFileBuffer
-              });
-            });
-          });
-        } catch (error) {
-          reject(error);
-        }
-      });
+      return patchROM(asset, isoFile, destFile, version, clear, store, enqueueSnackbar, closeSnackbar);
     default:
       return undefined;
   }
@@ -122,6 +84,7 @@ const StepContent = ({ stepIndex }) => {
   const setDisabledNext = useSetupStore((state) => state.setDisabledNext);
   switch (stepIndex) {
     case 0:
+      !isoFile && setIsoFile(store.get("vanillaIsoPath"));
       setDisabledNext(isoFile === undefined);
       return (
         <FileSelector
@@ -156,7 +119,7 @@ const StepContent = ({ stepIndex }) => {
   }
 };
 
-export default function HorizontalLabelPositionBelowStepper() {
+export default function Setup() {
   const classes = useStyles();
   const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
@@ -167,6 +130,8 @@ export default function HorizontalLabelPositionBelowStepper() {
   ];
   const isoFile = useSetupStore((state) => state.isoFile);
   const destFile = useSetupStore((state) => state.destFile);
+  const version = useSetupStore((state) => state.version);
+  const clear = useSetupStore((state) => state.clear);
   const selectedAsset = useSetupStore((state) => state.selectedAsset);
   const disabledNext = useSetupStore((state) => state.disabledNext);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -174,14 +139,18 @@ export default function HorizontalLabelPositionBelowStepper() {
   const history = useHistory();
 
   const handleNext = () => {
-    const result = validateStep(activeStep, isoFile, destFile, selectedAsset, enqueueSnackbar, closeSnackbar);
+    const result = validateStep(activeStep, isoFile, destFile, selectedAsset, version, clear, enqueueSnackbar, closeSnackbar);
     if (result instanceof Promise) {
       setLoading(true);
       setError("");
       result.then(
         () => {
           setLoading(false);
-          setActiveStep((step) => step + 1);
+          if (activeStep === 2) {
+            history.push("/");
+          } else {
+            setActiveStep((step) => step + 1);
+          }
         },
         (rejection) => {
           setLoading(false);
@@ -191,7 +160,11 @@ export default function HorizontalLabelPositionBelowStepper() {
     } else {
       if (!result) {
         setError("");
-        setActiveStep((step) => step + 1);
+        if (activeStep === 2) {
+          history.push("/");
+        } else {
+          setActiveStep((step) => step + 1);
+        }
       } else {
         setError(result);
       }
@@ -200,6 +173,7 @@ export default function HorizontalLabelPositionBelowStepper() {
 
   const handleBack = () => {
     if (activeStep === 0) {
+      clear();
       history.push("/");
     } else {
       setError("");
@@ -248,7 +222,7 @@ export default function HorizontalLabelPositionBelowStepper() {
               {error}
             </div>
             <div className={classes.navigationButtons}>
-              <Button onClick={handleBack} className={classes.backButton} disabled={loading}>
+              <Button onClick={handleBack} className={classes.backButton} disabled={loading || (activeStep === 0 && !store.get("trackedIsos").length)}>
                 Back
               </Button>
               <Button
