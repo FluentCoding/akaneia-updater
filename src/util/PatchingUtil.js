@@ -29,7 +29,6 @@ export const patchROM = (
   index
 ) => {
   if (!asset) return "Error";
-
   if (!isoFile) isoFile = store.get("vanillaIsoPath");
 
   var lastSnackbar = undefined;
@@ -59,28 +58,46 @@ export const patchROM = (
       );
 
       res.arrayBuffer().then((deltaBuffer) => {
-        fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (err) => {
+        return fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (data) => {
+          showInfo("Patching game...");
           const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
           execFile(
             xdeltaPath,
             ["-dfs", isoFile, assetPath, destFile],
             (err, stdout, stderr) => {
-              showInfo("Iso is patched...");
-              let trackedIsos = store.get("trackedIsos", []);
-              const newTrackedIso = {
-                name: "Akaneia Build",
-                version: version,
-                destPath: destFile,
-                owner: "akaneia",
-                repo: "akaneia-build",
-                assetName: asset.name,
-              };
-              if (index !== undefined) {
-                trackedIsos[index] = newTrackedIso;
+              if (err) {
+                console.log(err);
+                console.log(stderr);
+                enqueueSnackbar &&
+                enqueueSnackbar("Patch failed!", {
+                  variant: "error",
+                  autoHideDuration: null,
+                  anchorOrigin: { horizontal: "right", vertical: "top" },
+                  action: (key) => {
+                    lastSnackbar = key;
+                  },
+                });
               } else {
-                trackedIsos.push(newTrackedIso);
+                showInfo("Patch succeed!");
+                let trackedIsos = store.get("trackedIsos", []);
+                const newTrackedIso = {
+                  name: "Akaneia Build",
+                  version: version,
+                  destPath: destFile,
+                  owner: "akaneia",
+                  repo: "akaneia-build",
+                  assetName: asset.name,
+                };
+                if (index !== undefined) {
+                  trackedIsos[index] = newTrackedIso;
+                } else {
+                  trackedIsos.push(newTrackedIso);
+                }
+                store.set("trackedIsos", trackedIsos);
               }
-              store.set("trackedIsos", trackedIsos);
+              clear();
+              resolve();
+              closeSnackbar();
             }
           );
         });
