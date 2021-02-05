@@ -109,7 +109,7 @@ const StepContent = ({ stepIndex }) => {
           accept=".iso"
           placeholder="Select an unmodified SSBM iso"
           key="0"
-          file={isoFile ? isoFile : store.get("vanillaIsoPath")}
+          file={isoFile ?? store.get("vanillaIsoPath")}
           setFile={setIsoFile}
         />
       );
