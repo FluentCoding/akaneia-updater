@@ -121,7 +121,7 @@ export default function BuildCardGrid() {
 
     const result = await fetchReleases();
 
-    data.forEach((trackedIso, i) => {
+    data?.forEach((trackedIso, i) => {
       var trackedIsoState = {};
       var asset = result.assets.find(
         (asset) => path.parse(asset.name).name === trackedIso.assetName
@@ -154,7 +154,7 @@ export default function BuildCardGrid() {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Do you want to delete the patched file too?<br></br>
-            {data[deletionIndex] && <>Path: <i>{data[deletionIndex]?.destPath}</i></>}
+            {data && typeof data[deletionIndex] !== 'undefined' && <>Path: <i>{data[deletionIndex]?.destPath}</i></>}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
