@@ -1,5 +1,21 @@
 import fs from "fs";
+import path from "path";
 import fetch from "node-fetch";
+import { execFile } from "child_process";
+import isPackaged from "electron-is-packaged";
+import { rootPath } from "electron-root-path";
+import { remote } from "electron";
+import getPlatform from "./getPlatform";
+const app = remote.app;
+
+const IS_PROD = process.env.NODE_ENV === "production";
+const root = rootPath;
+const { getAppPath } = app;
+
+const binariesPath =
+  IS_PROD && isPackaged
+    ? path.join(path.dirname(getAppPath()), "..", "./Resources", "./bin")
+    : path.join(root, "./resources", getPlatform(), "./bin");
 
 export const patchROM = (
   asset,
@@ -37,56 +53,36 @@ export const patchROM = (
           "Content-Type": "application/octet-stream",
         },
       });
-      showInfo("Reading patch file...");
+      const assetPath = path.join(
+        app.getPath("temp"),
+        `${app.getName()}-${Date.now()}-${asset.name}`
+      );
+
       res.arrayBuffer().then((deltaBuffer) => {
-        showInfo("Reading game file...");
-        fs.readFile(isoFile, (err, isoFileBuffer) => {
-          showInfo("Patching the game...");
-          let worker = new Worker("./worker.js");
-
-          worker.addEventListener("message", (e) => {
-            showInfo("Writing into new game file...");
-            try {
-              fs.writeFile(destFile, new Uint8Array(e.data), () => {
-                console.log(asset.downloadUrl);
-                console.log(deltaBuffer);
-                console.log(isoFileBuffer);
-                console.log(e.data);
-                // store into config
-                let trackedIsos = store.get("trackedIsos", []);
-                const newTrackedIso = {
-                  name: "Akaneia Build",
-                  version: version,
-                  destPath: destFile,
-                  owner: "akaneia",
-                  repo: "akaneia-build",
-                  assetName: asset.name,
-                };
-                if (index !== undefined) {
-                  trackedIsos[index] = newTrackedIso;
-                } else {
-                  trackedIsos.push(newTrackedIso);
-                }
-                store.set("trackedIsos", trackedIsos);
-
-                clear && clear();
-                closeSnackbar && closeSnackbar(lastSnackbar);
-                enqueueSnackbar &&
-                  enqueueSnackbar("All steps completed!", {
-                    variant: "success",
-                    anchorOrigin: { horizontal: "right", vertical: "top" },
-                  });
-                resolve();
-              });
-            } catch (error) {
-              reject(error);
+        fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (err) => {
+          const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
+          execFile(
+            xdeltaPath,
+            ["-dfs", isoFile, assetPath, destFile],
+            (err, stdout, stderr) => {
+              showInfo("Iso is patched...");
+              let trackedIsos = store.get("trackedIsos", []);
+              const newTrackedIso = {
+                name: "Akaneia Build",
+                version: version,
+                destPath: destFile,
+                owner: "akaneia",
+                repo: "akaneia-build",
+                assetName: asset.name,
+              };
+              if (index !== undefined) {
+                trackedIsos[index] = newTrackedIso;
+              } else {
+                trackedIsos.push(newTrackedIso);
+              }
+              store.set("trackedIsos", trackedIsos);
             }
-          });
-
-          worker.postMessage({
-            deltaBuffer: deltaBuffer,
-            isoFileBuffer: isoFileBuffer,
-          });
+          );
         });
       });
     } catch (error) {
