@@ -71,19 +71,22 @@ export const patchROM = (
                   console.log(err);
                   console.log(stderr);
                   enqueueSnackbar &&
-                  enqueueSnackbar("Patch failed!", {
-                    variant: "error",
-                    anchorOrigin: { horizontal: "right", vertical: "top" }
-                  });
+                    enqueueSnackbar("Patch failed!", {
+                      variant: "error",
+                      anchorOrigin: { horizontal: "right", vertical: "top" },
+                    });
                 } else {
                   enqueueSnackbar &&
                   enqueueSnackbar("Patch succeed!", {
                     variant: "success",
-                    anchorOrigin: { horizontal: "right", vertical: "top" }
+                    anchorOrigin: { horizontal: "right", vertical: "top" },
                   });
                   let trackedIsos = store.get("trackedIsos", []);
                   const newTrackedIso = {
-                    name: "Akaneia Build",
+                    name:
+                      "Akaneia " +
+                      asset.name?.charAt(0).toUpperCase() +
+                      asset.name.slice(1),
                     version: version,
                     destPath: destFile,
                     owner: "akaneia",

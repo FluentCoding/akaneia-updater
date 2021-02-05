@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import Delete from "@material-ui/icons/Delete";
-import logo from "../static/logo.svg";
 import store from "../util/config";
 import { Badge, Button, CircularProgress } from "@material-ui/core";
 import { fetchReleases } from "../util/GithubUtil";
@@ -189,9 +188,6 @@ export default function BuildCardGrid() {
             return (
               <Grid item>
                 <Paper className={classes.card} elevation={3}>
-                  <Box>
-                    <img className={classes.cover} src={logo} alt="logo" />
-                  </Box>
                   <Box className={classes.content}>
                     <Box>{build?.name}</Box>
                     <Box className={classes.version} color="text.secondary">
