@@ -116,31 +116,34 @@ export default function BuildCardGrid() {
     else forceUpdate();
   };
 
-  useEffect(async () => {
-    if (!loading) return;
+  useEffect(() => {
+    async function updateStore() {
+      if (!loading) return;
 
-    const result = await fetchReleases();
+      const result = await fetchReleases();
 
-    data?.forEach((trackedIso, i) => {
-      var trackedIsoState = {};
-      var asset = result.assets.find(
-        (asset) => path.parse(asset.name).name === trackedIso.assetName
-      );
-      trackedIsoState.asset = {
-        downloadUrl: asset.browser_download_url,
-        name: trackedIso.assetName,
-      };
-      trackedIsoState.hasUpdate =
-        compareVersions(result.version, trackedIso.version) === 1
-          ? result.version
-          : undefined;
-      trackedIsoState.isUpdating = false;
+      data?.forEach((trackedIso, i) => {
+        var trackedIsoState = {};
+        var asset = result.assets.find(
+          (asset) => path.parse(asset.name).name === trackedIso.assetName
+        );
+        trackedIsoState.asset = {
+          downloadUrl: asset.browser_download_url,
+          name: trackedIso.assetName,
+        };
+        trackedIsoState.hasUpdate =
+          compareVersions(result.version, trackedIso.version) === 1
+            ? result.version
+            : undefined;
+        trackedIsoState.isUpdating = false;
 
-      setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
-    });
+        setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
+      });
 
-    setLoading(false);
-  }, []);
+      setLoading(false);
+    }
+    updateStore();
+  }, [data, loading, trackedIsoStates]);
 
   return (
     <>
@@ -154,7 +157,11 @@ export default function BuildCardGrid() {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Do you want to delete the patched file too?<br></br>
-            {data && typeof data[deletionIndex] !== 'undefined' && <>Path: <i>{data[deletionIndex]?.destPath}</i></>}
+            {data && typeof data[deletionIndex] !== "undefined" && (
+              <>
+                Path: <i>{data[deletionIndex]?.destPath}</i>
+              </>
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -198,19 +205,19 @@ export default function BuildCardGrid() {
                   </Box>
                   <Badge
                     color="error"
-                    badgeContent={trackedIsoStates[index].hasUpdate}
+                    badgeContent={trackedIsoStates[index]?.hasUpdate}
                     showZero
                   >
                     <Button
                       variant="contained"
                       color="secondary"
                       disabled={
-                        !trackedIsoStates[index].hasUpdate ||
-                        trackedIsoStates[index].isUpdating
+                        !trackedIsoStates[index]?.hasUpdate ||
+                        trackedIsoStates[index]?.isUpdating
                       }
                       style={{ marginLeft: 5, marginRight: 5 }}
                       onClick={() => {
-                        if (trackedIsoStates[index].hasUpdate) {
+                        if (trackedIsoStates[index]?.hasUpdate) {
                           const newTrackedIsoStates = trackedIsoStates;
                           newTrackedIsoStates[index].isUpdating = true;
                           setTrackedIsoStates(newTrackedIsoStates);
@@ -247,11 +254,11 @@ export default function BuildCardGrid() {
                       {isUpdating && (
                         <CircularProgress size={28} color="default" />
                       )}
-                      {trackedIsoStates[index].hasUpdate &&
-                        !trackedIsoStates[index].isUpdating &&
+                      {trackedIsoStates[index]?.hasUpdate &&
+                        !trackedIsoStates[index]?.isUpdating &&
                         "Update"}
-                      {!trackedIsoStates[index].hasUpdate &&
-                        !trackedIsoStates[index].isUpdating &&
+                      {!trackedIsoStates[index]?.hasUpdate &&
+                        !trackedIsoStates[index]?.isUpdating &&
                         "No update available"}
                     </Button>
                   </Badge>
