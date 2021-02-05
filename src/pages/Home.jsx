@@ -31,7 +31,7 @@ export default function Home() {
   const classes = useStyles();
   const history = useHistory();
 
-  if (!store.get("trackedIsos")) history.push("/setup");
+  if (!store.get("trackedIsos")?.length) history.push("/setup");
   return (
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
