@@ -253,7 +253,8 @@ export default function Setup() {
                 onClick={handleBack}
                 className={classes.backButton}
                 disabled={
-                  loading || (activeStep === 0 && !store.get("trackedIsos")?.length)
+                  loading ||
+                  (activeStep === 0 && !store.get("trackedIsos")?.length)
                 }
               >
                 Back

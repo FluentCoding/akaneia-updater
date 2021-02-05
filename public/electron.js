@@ -51,7 +51,13 @@ function createWindow() {
     const result = await electron.dialog.showSaveDialogSync(
       electron.mainWindow,
       {
-        filters: [{ name: "Gamecube Game Image", extensions: ["iso"] }],
+        filters: [
+          {
+            name: "Gamecube Game Image",
+            extensions: ["iso"],
+          },
+        ],
+        defaultPath: ".iso",
       }
     );
     if (!result) return;
