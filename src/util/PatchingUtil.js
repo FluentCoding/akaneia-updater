@@ -76,6 +76,7 @@ export const patchROM = (
                     anchorOrigin: { horizontal: "right", vertical: "top" }
                   });
                 } else {
+                  enqueueSnackbar &&
                   enqueueSnackbar("Patch succeed!", {
                     variant: "success",
                     anchorOrigin: { horizontal: "right", vertical: "top" }
@@ -101,7 +102,7 @@ export const patchROM = (
               }
             );
           } catch(error) {
-            closeSnackbar();
+            closeSnackbar && closeSnackbar();
           }
         });
       });
