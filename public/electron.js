@@ -43,7 +43,7 @@ function createWindow() {
   );
 
   // Hide menu on prod
-  if (!isDev) mainWindow.setMenu(null);
+  //if (!isDev) mainWindow.setMenu(null);
 
   mainWindow.on("closed", () => (mainWindow = null));
 
