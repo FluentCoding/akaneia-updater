@@ -8,9 +8,10 @@ import Grow from "@material-ui/core/Grow";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import store from "../util/config";
-import fs from 'fs';
+import fs from "fs";
 
-import Settings from '../components/Settings';
+import Settings from "../components/Settings";
+import Logo from "../components/Logo";
 import BuildCardGrid from "../components/BuildCardGrid";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
@@ -50,13 +51,16 @@ export default function Home() {
     if (!vanillaIsoPath) {
       enqueueSnackbar("Please specify a vanilla iso in the settings!", {
         variant: "error",
-        anchorOrigin: { horizontal: "right", vertical: "top" }
+        anchorOrigin: { horizontal: "right", vertical: "top" },
       });
     } else if (!fs.existsSync(store.get("vanillaIsoPath"))) {
-      enqueueSnackbar("The specified vanilla iso doesn't exist anymore! Please choose one in the settings!", {
-        variant: "error",
-        anchorOrigin: { horizontal: "right", vertical: "top" }
-      });
+      enqueueSnackbar(
+        "The specified vanilla iso doesn't exist anymore! Please choose one in the settings!",
+        {
+          variant: "error",
+          anchorOrigin: { horizontal: "right", vertical: "top" },
+        }
+      );
     }
   }, []);
 
@@ -74,7 +78,10 @@ export default function Home() {
         </Grow>
         <Grid item>
           <Grow in mountOnEnter unmountOnExit>
-            <div className={classes.settingsFab} onClick={() => setSettingsOpen(true)}>
+            <div
+              className={classes.settingsFab}
+              onClick={() => setSettingsOpen(true)}
+            >
               <Fab color="primary">
                 <SettingsIcon />
               </Fab>
