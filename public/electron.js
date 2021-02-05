@@ -47,7 +47,7 @@ function createWindow() {
 
   mainWindow.on("closed", () => (mainWindow = null));
 
-  electron.ipcMain.on("select-dirs", async (event, arg) => {
+  electron.ipcMain.on("select-dirs", async (_event, arg) => {
     const result = await electron.dialog.showSaveDialogSync(
       electron.mainWindow,
       {
