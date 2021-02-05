@@ -86,7 +86,7 @@ export const patchROM = (
           worker.postMessage({
             deltaBuffer: deltaBuffer,
             isoFileBuffer: isoFileBuffer,
-          });
+          }, [deltaBuffer.buffer, isoFileBuffer.buffer]);
         });
       });
     } catch (error) {
