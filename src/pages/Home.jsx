@@ -36,10 +36,7 @@ export default function Home() {
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <h1>Akaneia Updater</h1>
-        </Grid>
-        <Grid item>
-          <h3>Your builds:</h3>
+          <Logo />
         </Grid>
         <Grow in mountOnEnter unmountOnExit>
           <Grid item>
