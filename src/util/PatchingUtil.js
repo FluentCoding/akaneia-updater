@@ -42,7 +42,7 @@ export const patchROM = (
         showInfo("Reading game file...");
         fs.readFile(isoFile, (err, isoFileBuffer) => {
           showInfo("Patching the game...");
-          let worker = new Worker("../worker.js");
+          let worker = new Worker("./worker.js");
 
           worker.addEventListener("message", (e) => {
             showInfo("Writing into new game file...");

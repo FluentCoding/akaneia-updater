@@ -4,6 +4,7 @@ artifactName: Akaneia-Updater-${version}-${os}.${ext}
 
 files:
   - build
+  - public
 
 win:
   publisherName: Akaneia
@@ -35,5 +36,5 @@ appImage:
   artifactName: Akaneia-Updater-${version}-x86_64.${ext}
 
 directories:
-  buildResources: ressources
+  buildResources: resources
   output: dist

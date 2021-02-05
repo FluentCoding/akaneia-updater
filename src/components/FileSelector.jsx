@@ -49,7 +49,7 @@ export default function FileSelector({
   const selectFile = (e) => {
     var value = e.target.files[0];
     setPath(pathUtil.basename(value.name));
-    setFile(value.name);
+    setFile(value.path);
   };
 
   const classes = useStyles();
