@@ -66,7 +66,7 @@ export const patchROM = (
               xdeltaPath,
               ["-dfs", isoFile, assetPath, destFile],
               (err, stdout, stderr) => {
-                closeSnackbar(lastSnackbar);
+                closeSnackbar && closeSnackbar(lastSnackbar);
                 if (err) {
                   console.log(err);
                   console.log(stderr);
