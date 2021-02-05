@@ -206,7 +206,7 @@ export default function BuildCardGrid() {
                   >
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       disabled={
                         !trackedIsoStates[index]?.hasUpdate ||
                         trackedIsoStates[index]?.isUpdating
