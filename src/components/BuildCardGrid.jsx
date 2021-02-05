@@ -154,7 +154,7 @@ export default function BuildCardGrid() {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Do you want to delete the patched file too?<br></br>
-            Path: <i>{data[deletionIndex]?.destPath}</i>
+            {data[deletionIndex] && <>Path: <i>{data[deletionIndex]?.destPath}</i></>}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
