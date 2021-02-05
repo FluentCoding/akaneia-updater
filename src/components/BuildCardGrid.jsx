@@ -199,8 +199,8 @@ export default function BuildCardGrid() {
                     </Box>
                   </Box>
                   <Box className={classes.button}>
-                    <IconButton onClick={() => handleClickOpen(index)}>
-                      <Delete color="secondary" />
+                    <IconButton disabled={trackedIsoStates[index]?.isUpdating} onClick={() => handleClickOpen(index)}>
+                      <Delete color={trackedIsoStates[index]?.isUpdating ? "disabled" : "secondary"} />
                     </IconButton>
                   </Box>
                   <Badge
