@@ -100,7 +100,7 @@ export const patchROM = (
                   }
                   store.set("trackedIsos", trackedIsos);
                 }
-                clear();
+                clear && clear();
                 resolve();
               }
             );
