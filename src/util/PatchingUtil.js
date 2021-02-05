@@ -48,6 +48,10 @@ export const patchROM = (
             showInfo("Writing into new game file...");
             try {
               fs.writeFile(destFile, new Uint8Array(e.data), () => {
+                console.log(asset.downloadUrl);
+                console.log(deltaBuffer);
+                console.log(isoFileBuffer);
+                console.log(e.data);
                 // store into config
                 let trackedIsos = store.get("trackedIsos", []);
                 const newTrackedIso = {
