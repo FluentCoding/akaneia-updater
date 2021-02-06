@@ -1,20 +1,22 @@
+import React, { useEffect, useState, Suspense } from "react";
 import Box from "@material-ui/core/Box";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Grid from "@material-ui/core/Grid";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grow from "@material-ui/core/Grow";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import store from "../util/config";
 import fs from "fs";
 
 import Settings from "../components/Settings";
 import Logo from "../components/Logo";
-import BuildCardGrid from "../components/BuildCardGrid";
-import { useEffect, useState } from "react";
-import { useSnackbar } from "notistack";
+const BuildCardGrid = React.lazy(() => import("../components/BuildCardGrid"));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
   setupButton: {
     textDecoration: "none",
     color: "black",
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
   },
 }));
 
@@ -68,14 +74,21 @@ export default function Home() {
 
   return (
     <Box className={classes.root}>
-      <Settings open={settingsOpen} setOpen={setSettingsOpen} />
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
           <Logo />
         </Grid>
         <Grow in mountOnEnter unmountOnExit>
           <Grid item>
-            <BuildCardGrid />
+            <Suspense
+              fallback={
+                <Backdrop open>
+                  <CircularProgress />
+                </Backdrop>
+              }
+            >
+              <BuildCardGrid />
+            </Suspense>
           </Grid>
         </Grow>
         <Grid item>
@@ -98,6 +111,9 @@ export default function Home() {
               </Fab>
             </Link>
           </Grow>
+        </Grid>
+        <Grid item>
+          <Settings open={settingsOpen} setOpen={setSettingsOpen} />
         </Grid>
       </Grid>
     </Box>
