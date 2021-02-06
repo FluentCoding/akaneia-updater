@@ -23,6 +23,9 @@ import fs from "fs";
 import path from "path";
 import { useSnackbar } from "notistack";
 import { patchROM } from "../util/PatchingUtil";
+import Pagination from '@material-ui/lab/Pagination'
+
+const MAX_SIZE = 3;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -79,6 +82,7 @@ export default function BuildCardGrid() {
   const [deletionIndex, setDeletionIndex] = useState(undefined);
   const isUpdating =
     trackedIsoStates.filter((build) => build.isUpdating).length > 0;
+  const [page, setPage] = useState(1);
   const forceUpdate = useForceUpdate();
 
   const handleClickOpen = (index) => {
@@ -191,6 +195,9 @@ export default function BuildCardGrid() {
       >
         {data &&
           data.map((build, index) => {
+            if (index < (page * MAX_SIZE - MAX_SIZE) || index >= (page * MAX_SIZE))
+              return;
+            
             return (
               <Grid item>
                 <Paper className={classes.card} elevation={3}>
@@ -275,6 +282,9 @@ export default function BuildCardGrid() {
               </Grid>
             );
           })}
+          <Grid item>
+            <Pagination disabled={data.length < MAX_SIZE} count={parseInt((data.length / MAX_SIZE) + 1, 10)} page={page} onChange={(ev, val) => setPage(val)} />
+          </Grid>
       </Grid>
     </>
   );
