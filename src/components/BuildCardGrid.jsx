@@ -88,8 +88,6 @@ export default function BuildCardGrid() {
   const [trackedIsoStates, setTrackedIsoStates] = useState([]);
   const [open, setOpen] = useState(false);
   const [deletionIndex, setDeletionIndex] = useState(undefined);
-  const isUpdating =
-    trackedIsoStates.filter((build) => build.isUpdating).length > 0;
   const [page, setPage] = useState(1);
   const forceUpdate = useForceUpdate();
 
@@ -303,7 +301,7 @@ export default function BuildCardGrid() {
         disabled={data.length < MAX_SIZE}
         count={Math.ceil(data.length / MAX_SIZE)}
         page={page}
-        onChange={(ev, val) => setPage(val)}
+        onChange={(_ev, val) => setPage(val)}
       />
     </>
   );
