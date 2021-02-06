@@ -43,10 +43,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function getSteps() {
-  return ["Set SSBM iso", "Set iso folder", "Finish setup"];
-}
-
 function validateStep(
   stepIndex,
   isoFile,
@@ -157,7 +153,6 @@ export default function Setup() {
   const classes = useStyles();
   const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
-  const steps = getSteps();
   const [loading, setLoading] = [
     useSetupStore((state) => state.loading),
     useSetupStore((state) => state.setLoading),
@@ -169,6 +164,7 @@ export default function Setup() {
   const selectedAsset = useSetupStore((state) => state.selectedAsset);
   const disabledNext = useSetupStore((state) => state.disabledNext);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const steps = 3;
 
   const history = useHistory();
 
@@ -235,7 +231,7 @@ export default function Setup() {
         activeStep={activeStep}
         alternativeLabel
       >
-        {steps.map((label) => (
+        {[...Array(steps).keys()].map((label) => (
           <Step key={label}>
             <StepLabel />
           </Step>
