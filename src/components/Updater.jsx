@@ -21,11 +21,13 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
   const [assets, setAssets] = useState(undefined);
   const loading = useSetupStore((state) => state.loading);
 
-  useEffect(async () => {
-    const result = await fetchReleases();
-
-    setVersion(result.version);
-    setAssets(result.assets);
+  useEffect(() => {
+    fetchReleases().then((result) => {
+      if (result === null)
+        return;
+      setVersion(result.version);
+      setAssets(result.assets);
+    });
   }, []);
 
   const classes = useStyles();

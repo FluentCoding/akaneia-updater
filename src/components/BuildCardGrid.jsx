@@ -118,10 +118,17 @@ export default function BuildCardGrid() {
   };
 
   useEffect(() => {
-    async function updateStore() {
-      if (!loading) return;
+    if (!loading) return;
 
-      const result = await fetchReleases();
+    fetchReleases().then(result => {
+      setLoading(false);
+      if (!result) {
+        enqueueSnackbar("Connection failed!", {
+          variant: "error",
+          anchorOrigin: { horizontal: "right", vertical: "top" },
+        });
+        return;
+      }
 
       data?.forEach((trackedIso, i) => {
         var trackedIsoState = {};
@@ -141,17 +148,14 @@ export default function BuildCardGrid() {
 
         setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
       });
-
-      setLoading(false);
-    }
-    updateStore();
+    });
   }, [data, loading, trackedIsoStates]);
 
   return (
     <>
       <Dialog
         open={open}
-        onClose={() => handleClose("cancel")}
+        onClose={() => handleClose('cancel')}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -186,7 +190,6 @@ export default function BuildCardGrid() {
         spacing={2}
       >
         {data &&
-          !loading &&
           data.map((build, index) => {
             return (
               <Grid item>
