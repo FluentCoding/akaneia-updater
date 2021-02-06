@@ -116,40 +116,37 @@ export default function BuildCardGrid() {
   };
 
   useEffect(() => {
-    async function updateStore() {
-      if (!loading) return;
+    if (!loading) return;
 
-      fetchReleases().then(result => {
-        setLoading(false);
-        if (!result) {
-          enqueueSnackbar("Connection failed!", {
-            variant: "error",
-            anchorOrigin: { horizontal: "right", vertical: "top" },
-          });
-          return;
-        }
-
-        data?.forEach((trackedIso, i) => {
-          var trackedIsoState = {};
-          var asset = result.assets.find(
-            (asset) => path.parse(asset.name).name === trackedIso.assetName
-          );
-          
-          trackedIsoState.asset = {
-            downloadUrl: asset ? asset.browser_download_url : undefined,
-            name: trackedIso.assetName,
-          };
-          trackedIsoState.hasUpdate = asset &&
-            compareVersions(result.version, trackedIso.version) === 1
-              ? result.version
-              : undefined;
-          trackedIsoState.isUpdating = false;
-  
-          setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
+    fetchReleases().then(result => {
+      setLoading(false);
+      if (!result) {
+        enqueueSnackbar("Connection failed!", {
+          variant: "error",
+          anchorOrigin: { horizontal: "right", vertical: "top" },
         });
+        return;
+      }
+
+      data?.forEach((trackedIso, i) => {
+        var trackedIsoState = {};
+        var asset = result.assets.find(
+          (asset) => path.parse(asset.name).name === trackedIso.assetName
+        );
+        
+        trackedIsoState.asset = {
+          downloadUrl: asset ? asset.browser_download_url : undefined,
+          name: trackedIso.assetName,
+        };
+        trackedIsoState.hasUpdate = asset &&
+          compareVersions(result.version, trackedIso.version) === 1
+            ? result.version
+            : undefined;
+        trackedIsoState.isUpdating = false;
+
+        setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
       });
-    }
-    updateStore();
+    });
   }, [data, loading, trackedIsoStates]);
 
   return (
