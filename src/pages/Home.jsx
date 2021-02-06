@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@material-ui/core/Box";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -6,7 +6,6 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grow from "@material-ui/core/Grow";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import store from "../util/config";
@@ -97,11 +96,14 @@ export default function Home() {
         </Grid>
         <Grid item>
           <Grow in mountOnEnter unmountOnExit>
-            <Link to={isUpdating ? "/"  : "/setup"} className={classes.fab}>
-              <Fab disabled={isUpdating} color="primary">
-                <AddIcon />
-              </Fab>
-            </Link>
+            <Fab
+              className={classes.fab}
+              disabled={isUpdating}
+              color="primary"
+              onClick={() => history.push("/setup")}
+            >
+              <AddIcon />
+            </Fab>
           </Grow>
         </Grid>
       </Grid>
