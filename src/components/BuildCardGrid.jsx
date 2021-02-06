@@ -263,10 +263,12 @@ export default function BuildCardGrid() {
                         }
                       }}
                     >
-                      {isUpdating && (
+                      {trackedIsoStates[index]?.isUpdating &&
                         <CircularProgress size={28} color="default" />
-                      )}
-                      <UpdateIcon />
+                      }
+                      {!trackedIsoStates[index]?.isUpdating &&
+                        <UpdateIcon />
+                      }
                     </IconButton>
                   </Badge>
                 </Paper>
