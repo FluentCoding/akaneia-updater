@@ -126,13 +126,13 @@ export default function BuildCardGrid() {
         var asset = result.assets.find(
           (asset) => path.parse(asset.name).name === trackedIso.assetName
         );
-        
+
         trackedIsoState.asset = {
           downloadUrl: asset ? asset.browser_download_url : undefined,
           name: trackedIso.assetName,
         };
-        trackedIsoState.hasUpdate = asset &&
-          compareVersions(result.version, trackedIso.version) === 1
+        trackedIsoState.hasUpdate =
+          asset && compareVersions(result.version, trackedIso.version) === 1
             ? result.version
             : undefined;
         trackedIsoState.isUpdating = false;
@@ -196,8 +196,17 @@ export default function BuildCardGrid() {
                     </Box>
                   </Box>
                   <Box className={classes.button}>
-                    <IconButton disabled={trackedIsoStates[index]?.isUpdating} onClick={() => handleClickOpen(index)}>
-                      <Delete color={trackedIsoStates[index]?.isUpdating ? "disabled" : "secondary"} />
+                    <IconButton
+                      disabled={trackedIsoStates[index]?.isUpdating}
+                      onClick={() => handleClickOpen(index)}
+                    >
+                      <Delete
+                        color={
+                          trackedIsoStates[index]?.isUpdating
+                            ? "disabled"
+                            : "secondary"
+                        }
+                      />
                     </IconButton>
                   </Box>
                   <Badge

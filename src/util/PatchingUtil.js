@@ -77,10 +77,10 @@ export const patchROM = (
                     });
                 } else {
                   enqueueSnackbar &&
-                  enqueueSnackbar("Patch succeed!", {
-                    variant: "success",
-                    anchorOrigin: { horizontal: "right", vertical: "top" },
-                  });
+                    enqueueSnackbar("Patch succeed!", {
+                      variant: "success",
+                      anchorOrigin: { horizontal: "right", vertical: "top" },
+                    });
                   let trackedIsos = store.get("trackedIsos", []);
                   const newTrackedIso = {
                     name:
@@ -104,7 +104,7 @@ export const patchROM = (
                 resolve();
               }
             );
-          } catch(error) {
+          } catch (error) {
             closeSnackbar && closeSnackbar();
           }
         });
