@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+import Grow from "@material-ui/core/Grow";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -260,32 +261,34 @@ export default function Setup() {
             >
               {error}
             </div>
-            <div className={classes.navigationButtons}>
-              <Button
-                onClick={handleBack}
-                className={classes.backButton}
-                disabled={
-                  loading ||
-                  (activeStep === 0 && !store.get("trackedIsos")?.length)
-                }
-              >
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                disabled={loading || disabledNext}
-              >
-                {loading ? (
-                  <CircularProgress size={24} color="black" />
-                ) : activeStep === steps.length - 1 ? (
-                  "Finish"
-                ) : (
-                  "Next"
-                )}
-              </Button>
-            </div>
+            <Grow in mountOnEnter unmountOnExit>
+              <div className={classes.navigationButtons}>
+                <Button
+                  onClick={handleBack}
+                  className={classes.backButton}
+                  disabled={
+                    loading ||
+                    (activeStep === 0 && !store.get("trackedIsos")?.length)
+                  }
+                >
+                  Back
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  disabled={loading || disabledNext}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="black" />
+                  ) : activeStep === steps.length - 1 ? (
+                    "Finish"
+                  ) : (
+                    "Next"
+                  )}
+                </Button>
+              </div>
+            </Grow>
           </div>
         )}
       </div>
