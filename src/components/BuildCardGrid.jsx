@@ -262,7 +262,6 @@ export default function BuildCardGrid(props) {
                           newTrackedIsoStates[index].hasUpdate = undefined;
                           setTrackedIsoStates(newTrackedIsoStates);
                           forceUpdate();
-                          return;
                         } else {
                           result.then(() => {
                             newTrackedIsoStates[index].isUpdating = false;
