@@ -126,11 +126,12 @@ export default function BuildCardGrid() {
         var asset = result.assets.find(
           (asset) => path.parse(asset.name).name === trackedIso.assetName
         );
+        
         trackedIsoState.asset = {
-          downloadUrl: asset.browser_download_url,
+          downloadUrl: asset ? asset.browser_download_url : undefined,
           name: trackedIso.assetName,
         };
-        trackedIsoState.hasUpdate =
+        trackedIsoState.hasUpdate = asset &&
           compareVersions(result.version, trackedIso.version) === 1
             ? result.version
             : undefined;
