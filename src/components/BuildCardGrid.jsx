@@ -79,7 +79,7 @@ function useForceUpdate() {
   return () => setValue((value) => value + 1); // update the state to force render
 }
 
-export default function BuildCardGrid() {
+export default function BuildCardGrid(props) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();

@@ -4,8 +4,6 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Grid from "@material-ui/core/Grid";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grow from "@material-ui/core/Grow";
 import { Link } from "react-router-dom";
@@ -48,6 +46,7 @@ export default function Home() {
 
   const classes = useStyles();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isUpdating, setUpdating] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function Home() {
         </Grid>
         <Grow in mountOnEnter unmountOnExit>
           <Grid item>
-            <BuildCardGrid />
+            <BuildCardGrid setUpdating={setUpdating} />
           </Grid>
         </Grow>
         <Grid item>
@@ -98,8 +97,8 @@ export default function Home() {
         </Grid>
         <Grid item>
           <Grow in mountOnEnter unmountOnExit>
-            <Link to="/setup" className={classes.fab}>
-              <Fab color="primary">
+            <Link to={isUpdating ? "/"  : "/setup"} className={classes.fab}>
+              <Fab disabled={isUpdating} color="primary">
                 <AddIcon />
               </Fab>
             </Link>
