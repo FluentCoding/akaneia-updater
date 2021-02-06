@@ -1,10 +1,12 @@
 # Akaneia Updater
 
+![](resources/screenshot.png)
+
 ## F.A.Q.
 
 > **Windows protected your PC**, what do I do ?
 
-![](resources/help/windows.jpg)
+Click on `More info` then `Run anyway`.
 
 > My antivirus tells me it isn't safe, is it?
 
