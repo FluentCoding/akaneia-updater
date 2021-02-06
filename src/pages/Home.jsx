@@ -45,7 +45,7 @@ export default function Home() {
 
   const classes = useStyles();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [updating, setUpdating] = useState(false);
+  const [isUpdating, setUpdating] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function Home() {
           <Grow in mountOnEnter unmountOnExit>
             <Fab
               className={classes.fab}
-              disabled={updating}
+              disabled={isUpdating}
               color="primary"
               onClick={() => history.push("/setup")}
             >

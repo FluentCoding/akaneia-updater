@@ -249,6 +249,7 @@ export default function BuildCardGrid(props) {
                       onClick={() => {
                         if (trackedIsoStates[index]?.hasUpdate) {
                           const newTrackedIsoStates = trackedIsoStates;
+                          props.setUpdating(true);
                           newTrackedIsoStates[index].isUpdating = true;
                           setTrackedIsoStates(newTrackedIsoStates);
                           forceUpdate();
@@ -264,6 +265,7 @@ export default function BuildCardGrid(props) {
                             index
                           );
                           if (typeof result === "string") {
+                            props.setUpdating(false);
                             newTrackedIsoStates[index].isUpdating = false;
                             newTrackedIsoStates[index].hasUpdate = undefined;
                             setTrackedIsoStates(newTrackedIsoStates);
@@ -271,6 +273,7 @@ export default function BuildCardGrid(props) {
                             return;
                           } else {
                             result.then(() => {
+                              props.setUpdating(false);
                               newTrackedIsoStates[index].isUpdating = false;
                               newTrackedIsoStates[index].hasUpdate = undefined;
                               setTrackedIsoStates(newTrackedIsoStates);
