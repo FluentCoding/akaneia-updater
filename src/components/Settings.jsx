@@ -1,15 +1,23 @@
 import store from "../util/config";
 import FileSelector from "./FileSelector";
+import Box from "@material-ui/core/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 
-export default (props) => {
+const useStyles = makeStyles((theme) => ({
+  root: {},
+}));
+
+const Settings = (props) => {
+  const classes = useStyles();
   return (
     <Dialog
+      className={classes.root}
       open={props.open}
       onClose={() => props.setOpen(false)}
       aria-labelledby="alert-dialog-title"
@@ -18,7 +26,7 @@ export default (props) => {
       <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Vanilla ISO Path:
+          <Box>Path of your unmodified SSBM iso:</Box>
           <FileSelector
             accept=".iso"
             placeholder="Select an unmodified SSBM iso"
@@ -37,3 +45,5 @@ export default (props) => {
     </Dialog>
   );
 };
+
+export default Settings;
