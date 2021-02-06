@@ -27,7 +27,7 @@ import Pagination from '@material-ui/lab/Pagination'
 
 const MAX_SIZE = 3;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
@@ -62,6 +62,11 @@ const useStyles = makeStyles(() => ({
   cardAction: {
     display: "block",
     textAlign: "initial",
+  },
+  pagination: {
+    position: "absolute",
+    bottom: theme.spacing(4.5),
+    left: theme.spacing(3),
   },
 }));
 
@@ -282,9 +287,7 @@ export default function BuildCardGrid() {
               </Grid>
             );
           })}
-          <Grid item>
-            <Pagination disabled={data.length < MAX_SIZE} count={parseInt((data.length / MAX_SIZE) + 1, 10)} page={page} onChange={(ev, val) => setPage(val)} />
-          </Grid>
+          <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={parseInt((data.length / MAX_SIZE) + 1, 10)} page={page} onChange={(ev, val) => setPage(val)} />
       </Grid>
     </>
   );
