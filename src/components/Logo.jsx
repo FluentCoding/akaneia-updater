@@ -5,9 +5,9 @@ import logo from "../static/logo.svg";
 
 const useStyles = makeStyles(() => ({
   logo: {
-    height: "13rem",
+    height: "10rem",
     pointerEvents: "none",
-    margin: "3rem",
+    margin: "2rem",
   },
 }));
 
