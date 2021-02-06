@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import Delete from "@material-ui/icons/Delete";
-import logo from "../static/logo.svg";
 import store from "../util/config";
 import { Badge, Button, CircularProgress } from "@material-ui/core";
 import { fetchReleases } from "../util/GithubUtil";
@@ -127,12 +126,13 @@ export default function BuildCardGrid() {
         var asset = result.assets.find(
           (asset) => path.parse(asset.name).name === trackedIso.assetName
         );
+
         trackedIsoState.asset = {
-          downloadUrl: asset.browser_download_url,
+          downloadUrl: asset ? asset.browser_download_url : undefined,
           name: trackedIso.assetName,
         };
         trackedIsoState.hasUpdate =
-          compareVersions(result.version, trackedIso.version) === 1
+          asset && compareVersions(result.version, trackedIso.version) === 1
             ? result.version
             : undefined;
         trackedIsoState.isUpdating = false;
@@ -189,9 +189,6 @@ export default function BuildCardGrid() {
             return (
               <Grid item>
                 <Paper className={classes.card} elevation={3}>
-                  <Box>
-                    <img className={classes.cover} src={logo} alt="logo" />
-                  </Box>
                   <Box className={classes.content}>
                     <Box>{build?.name}</Box>
                     <Box className={classes.version} color="text.secondary">
@@ -199,8 +196,17 @@ export default function BuildCardGrid() {
                     </Box>
                   </Box>
                   <Box className={classes.button}>
-                    <IconButton onClick={() => handleClickOpen(index)}>
-                      <Delete color="secondary" />
+                    <IconButton
+                      disabled={trackedIsoStates[index]?.isUpdating}
+                      onClick={() => handleClickOpen(index)}
+                    >
+                      <Delete
+                        color={
+                          trackedIsoStates[index]?.isUpdating
+                            ? "disabled"
+                            : "secondary"
+                        }
+                      />
                     </IconButton>
                   </Box>
                   <Badge
@@ -210,7 +216,7 @@ export default function BuildCardGrid() {
                   >
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       disabled={
                         !trackedIsoStates[index]?.hasUpdate ||
                         trackedIsoStates[index]?.isUpdating

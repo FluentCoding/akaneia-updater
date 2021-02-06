@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSnackbar } from "notistack";
 import { patchROM } from "../util/PatchingUtil";
+import fs from "fs";
 
 import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
@@ -69,8 +70,23 @@ function validateStep(
       });
     case 1:
       if (!destFile) return "Error";
+
+      // check if dest path is already used by other tracked isos
+      if (
+        store.has("trackedIsos") &&
+        store
+          .get("trackedIsos")
+          .find((trackedIso) => destFile === trackedIso.destPath)
+      ) {
+        return "You're already using this ISO for tracking!";
+      }
+
       return;
     case 2:
+      if (!fs.existsSync(isoFile ?? store.get("vanillaIsoPath"))) {
+        return "Your game file doesn't exist anymore!";
+      }
+
       return patchROM(
         asset,
         isoFile,
@@ -109,7 +125,7 @@ const StepContent = ({ stepIndex }) => {
           accept=".iso"
           placeholder="Select an unmodified SSBM iso"
           key="0"
-          file={isoFile}
+          file={isoFile ?? store.get("vanillaIsoPath")}
           setFile={setIsoFile}
         />
       );

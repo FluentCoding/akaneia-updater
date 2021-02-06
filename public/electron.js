@@ -43,11 +43,11 @@ function createWindow() {
   );
 
   // Hide menu on prod
-  //if (!isDev) mainWindow.setMenu(null);
+  if (!isDev) mainWindow.setMenu(null);
 
   mainWindow.on("closed", () => (mainWindow = null));
 
-  electron.ipcMain.on("select-dirs", async (event, arg) => {
+  electron.ipcMain.on("select-dirs", async (_event, arg) => {
     const result = await electron.dialog.showSaveDialogSync(
       electron.mainWindow,
       {
@@ -57,7 +57,6 @@ function createWindow() {
             extensions: ["iso"],
           },
         ],
-        defaultPath: ".iso",
       }
     );
     if (!result) return;

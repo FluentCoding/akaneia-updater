@@ -1,5 +1,21 @@
 import fs from "fs";
+import path from "path";
 import fetch from "node-fetch";
+import { execFile } from "child_process";
+import isPackaged from "electron-is-packaged";
+import { rootPath } from "electron-root-path";
+import { remote } from "electron";
+import getPlatform from "./getPlatform";
+const app = remote.app;
+
+const IS_PROD = process.env.NODE_ENV === "production";
+const root = rootPath;
+const { getAppPath } = app;
+
+const binariesPath =
+  IS_PROD && isPackaged
+    ? path.join(path.dirname(getAppPath()), "..", "./Resources", "./bin")
+    : path.join(root, "./resources", getPlatform(), "./bin");
 
 export const patchROM = (
   asset,
@@ -13,7 +29,6 @@ export const patchROM = (
   index
 ) => {
   if (!asset) return "Error";
-
   if (!isoFile) isoFile = store.get("vanillaIsoPath");
 
   var lastSnackbar = undefined;
@@ -37,56 +52,61 @@ export const patchROM = (
           "Content-Type": "application/octet-stream",
         },
       });
-      showInfo("Reading patch file...");
+      const assetPath = path.join(
+        app.getPath("temp"),
+        `${app.getName()}-${Date.now()}-${asset.name}`
+      );
+
       res.arrayBuffer().then((deltaBuffer) => {
-        showInfo("Reading game file...");
-        fs.readFile(isoFile, (err, isoFileBuffer) => {
-          showInfo("Patching the game...");
-          let worker = new Worker("./worker.js");
-
-          worker.addEventListener("message", (e) => {
-            showInfo("Writing into new game file...");
-            try {
-              fs.writeFile(destFile, new Uint8Array(e.data), () => {
-                console.log(asset.downloadUrl);
-                console.log(deltaBuffer);
-                console.log(isoFileBuffer);
-                console.log(e.data);
-                // store into config
-                let trackedIsos = store.get("trackedIsos", []);
-                const newTrackedIso = {
-                  name: "Akaneia Build",
-                  version: version,
-                  destPath: destFile,
-                  owner: "akaneia",
-                  repo: "akaneia-build",
-                  assetName: asset.name,
-                };
-                if (index !== undefined) {
-                  trackedIsos[index] = newTrackedIso;
-                } else {
-                  trackedIsos.push(newTrackedIso);
-                }
-                store.set("trackedIsos", trackedIsos);
-
-                clear && clear();
+        return fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (data) => {
+          showInfo("Patching game...");
+          const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
+          try {
+            execFile(
+              xdeltaPath,
+              ["-dfs", isoFile, assetPath, destFile],
+              (err, stdout, stderr) => {
                 closeSnackbar && closeSnackbar(lastSnackbar);
-                enqueueSnackbar &&
-                  enqueueSnackbar("All steps completed!", {
-                    variant: "success",
-                    anchorOrigin: { horizontal: "right", vertical: "top" },
-                  });
+                if (err) {
+                  console.log(err);
+                  console.log(stderr);
+                  enqueueSnackbar &&
+                    enqueueSnackbar("Patch failed!", {
+                      variant: "error",
+                      anchorOrigin: { horizontal: "right", vertical: "top" },
+                    });
+                } else {
+                  enqueueSnackbar &&
+                    enqueueSnackbar("Patch succeed!", {
+                      variant: "success",
+                      anchorOrigin: { horizontal: "right", vertical: "top" },
+                    });
+                  let trackedIsos = store.get("trackedIsos", []);
+                  const newTrackedIso = {
+                    name:
+                      "Akaneia " +
+                      asset.name?.charAt(0).toUpperCase() +
+                      asset.name.slice(1),
+                    version: version,
+                    destPath: destFile,
+                    owner: "akaneia",
+                    repo: "akaneia-build",
+                    assetName: asset.name,
+                  };
+                  if (index !== undefined) {
+                    trackedIsos[index] = newTrackedIso;
+                  } else {
+                    trackedIsos.push(newTrackedIso);
+                  }
+                  store.set("trackedIsos", trackedIsos);
+                }
+                clear && clear();
                 resolve();
-              });
-            } catch (error) {
-              reject(error);
-            }
-          });
-
-          worker.postMessage({
-            deltaBuffer: deltaBuffer,
-            isoFileBuffer: isoFileBuffer,
-          }, [deltaBuffer.buffer, isoFileBuffer.buffer]);
+              }
+            );
+          } catch (error) {
+            closeSnackbar && closeSnackbar();
+          }
         });
       });
     } catch (error) {

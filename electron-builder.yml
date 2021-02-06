@@ -5,8 +5,14 @@ artifactName: Akaneia-Updater-${version}-${os}.${ext}
 files:
   - build
 
+extraFiles:
+  - from: resources/${os}
+    to: Resources/bin
+    filter:
+      - "**/*"
+
 win:
-  publisherName: Akaneia
+  verifyUpdateCodeSignature: false
   icon: ./resources/icon.ico
   target:
     - nsis
