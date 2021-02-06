@@ -295,8 +295,8 @@ export default function BuildCardGrid() {
               </Grid>
             );
           })}
-          <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={Math.ceil(data.length / MAX_SIZE)} page={page} onChange={(ev, val) => setPage(val)} />
       </Grid>
+      <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={Math.ceil(data.length / MAX_SIZE)} page={page} onChange={(ev, val) => setPage(val)} />
     </>
   );
 }
