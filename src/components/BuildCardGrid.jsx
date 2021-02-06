@@ -123,7 +123,12 @@ export default function BuildCardGrid() {
     store.set("trackedIsos", data);
 
     if (!data.length) history.push("/setup");
-    else forceUpdate();
+    else {
+      if (page > Math.ceil(data.length / MAX_SIZE))
+        setPage(page - 1);
+      else
+        forceUpdate();
+    }
   };
 
   useEffect(() => {
@@ -139,6 +144,7 @@ export default function BuildCardGrid() {
         return;
       }
 
+      var trackedIsoStates = [];
       data?.forEach((trackedIso, i) => {
         var trackedIsoState = {};
         var asset = result.assets.find(
@@ -155,8 +161,10 @@ export default function BuildCardGrid() {
             : undefined;
         trackedIsoState.isUpdating = false;
 
-        setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
+        trackedIsoStates.push(trackedIsoState);
       });
+
+      setTrackedIsoStates(trackedIsoStates);
     });
   }, []);
 
@@ -287,8 +295,8 @@ export default function BuildCardGrid() {
               </Grid>
             );
           })}
-          <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={parseInt((data.length / MAX_SIZE) + 1, 10)} page={page} onChange={(ev, val) => setPage(val)} />
       </Grid>
+      <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={Math.ceil(data.length / MAX_SIZE)} page={page} onChange={(ev, val) => setPage(val)} />
     </>
   );
 }
