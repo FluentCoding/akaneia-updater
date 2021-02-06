@@ -119,28 +119,35 @@ export default function BuildCardGrid() {
     async function updateStore() {
       if (!loading) return;
 
-      const result = await fetchReleases();
+      fetchReleases().then(result => {
+        setLoading(false);
+        if (!result) {
+          enqueueSnackbar("Connection failed!", {
+            variant: "error",
+            anchorOrigin: { horizontal: "right", vertical: "top" },
+          });
+          return;
+        }
 
-      data?.forEach((trackedIso, i) => {
-        var trackedIsoState = {};
-        var asset = result.assets.find(
-          (asset) => path.parse(asset.name).name === trackedIso.assetName
-        );
-        
-        trackedIsoState.asset = {
-          downloadUrl: asset ? asset.browser_download_url : undefined,
-          name: trackedIso.assetName,
-        };
-        trackedIsoState.hasUpdate = asset &&
-          compareVersions(result.version, trackedIso.version) === 1
-            ? result.version
-            : undefined;
-        trackedIsoState.isUpdating = false;
-
-        setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
+        data?.forEach((trackedIso, i) => {
+          var trackedIsoState = {};
+          var asset = result.assets.find(
+            (asset) => path.parse(asset.name).name === trackedIso.assetName
+          );
+          
+          trackedIsoState.asset = {
+            downloadUrl: asset ? asset.browser_download_url : undefined,
+            name: trackedIso.assetName,
+          };
+          trackedIsoState.hasUpdate = asset &&
+            compareVersions(result.version, trackedIso.version) === 1
+              ? result.version
+              : undefined;
+          trackedIsoState.isUpdating = false;
+  
+          setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
+        });
       });
-
-      setLoading(false);
     }
     updateStore();
   }, [data, loading, trackedIsoStates]);
@@ -149,7 +156,7 @@ export default function BuildCardGrid() {
     <>
       <Dialog
         open={open}
-        onClose={() => handleClose("cancel")}
+        onClose={() => handleClose('cancel')}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -184,7 +191,6 @@ export default function BuildCardGrid() {
         spacing={2}
       >
         {data &&
-          !loading &&
           data.map((build, index) => {
             return (
               <Grid item>
