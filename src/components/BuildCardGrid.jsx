@@ -64,9 +64,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "initial",
   },
   pagination: {
-    position: "absolute",
-    bottom: theme.spacing(4.5),
-    left: theme.spacing(3),
+    justifyContent: "center",
+    alignSelf: "center",
+    margin: "1rem",
+    display: "inline-block",
   },
   loading: {
     height: "1rem",
@@ -296,13 +297,15 @@ export default function BuildCardGrid() {
             );
           })}
       </Grid>
-      <Pagination
-        className={classes.pagination}
-        disabled={data.length < MAX_SIZE}
-        count={Math.ceil(data.length / MAX_SIZE)}
-        page={page}
-        onChange={(_ev, val) => setPage(val)}
-      />
+      {data.length > 3 && (
+        <Pagination
+          className={classes.pagination}
+          disabled={data.length < MAX_SIZE}
+          count={Math.ceil(data.length / MAX_SIZE)}
+          page={page}
+          onChange={(_ev, val) => setPage(val)}
+        />
+      )}
     </>
   );
 }
