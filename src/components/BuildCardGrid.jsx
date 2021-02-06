@@ -23,7 +23,7 @@ import fs from "fs";
 import path from "path";
 import { useSnackbar } from "notistack";
 import { patchROM } from "../util/PatchingUtil";
-import Pagination from '@material-ui/lab/Pagination'
+import Pagination from "@material-ui/lab/Pagination";
 
 const MAX_SIZE = 3;
 
@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     bottom: theme.spacing(4.5),
     left: theme.spacing(3),
+  },
+  loading: {
+    height: "1rem",
   },
 }));
 
@@ -124,10 +127,8 @@ export default function BuildCardGrid() {
 
     if (!data.length) history.push("/setup");
     else {
-      if (page > Math.ceil(data.length / MAX_SIZE))
-        setPage(page - 1);
-      else
-        forceUpdate();
+      if (page > Math.ceil(data.length / MAX_SIZE)) setPage(page - 1);
+      else forceUpdate();
     }
   };
 
@@ -208,9 +209,9 @@ export default function BuildCardGrid() {
       >
         {data &&
           data.map((build, index) => {
-            if (index < (page * MAX_SIZE - MAX_SIZE) || index >= (page * MAX_SIZE))
+            if (index < page * MAX_SIZE - MAX_SIZE || index >= page * MAX_SIZE)
               return;
-            
+
             return (
               <Grid item>
                 <Paper className={classes.card} elevation={3}>
@@ -236,67 +237,74 @@ export default function BuildCardGrid() {
                       />
                     </IconButton>
                   </Box>
-                  <Badge
-                    color="error"
-                    badgeContent={trackedIsoStates[index]?.hasUpdate}
-                    showZero
-                  >
-                    <IconButton
-                      variant="contained"
-                      color="inherit"
-                      disabled={
-                        !trackedIsoStates[index]?.hasUpdate ||
-                        trackedIsoStates[index]?.isUpdating
-                      }
-                      onClick={() => {
-                        if (trackedIsoStates[index]?.hasUpdate) {
-                          const newTrackedIsoStates = trackedIsoStates;
-                          newTrackedIsoStates[index].isUpdating = true;
+                  <IconButton
+                    variant="contained"
+                    color="inherit"
+                    disabled={
+                      !trackedIsoStates[index]?.hasUpdate ||
+                      trackedIsoStates[index]?.isUpdating
+                    }
+                    onClick={() => {
+                      if (trackedIsoStates[index]?.hasUpdate) {
+                        const newTrackedIsoStates = trackedIsoStates;
+                        newTrackedIsoStates[index].isUpdating = true;
+                        setTrackedIsoStates(newTrackedIsoStates);
+                        forceUpdate();
+                        const result = patchROM(
+                          trackedIsoStates[index].asset,
+                          undefined,
+                          build.destPath,
+                          trackedIsoStates[index].hasUpdate,
+                          undefined,
+                          store,
+                          undefined,
+                          undefined,
+                          index
+                        );
+                        if (typeof result === "string") {
+                          newTrackedIsoStates[index].isUpdating = false;
+                          newTrackedIsoStates[index].hasUpdate = undefined;
                           setTrackedIsoStates(newTrackedIsoStates);
                           forceUpdate();
-                          const result = patchROM(
-                            trackedIsoStates[index].asset,
-                            undefined,
-                            build.destPath,
-                            trackedIsoStates[index].hasUpdate,
-                            undefined,
-                            store,
-                            undefined,
-                            undefined,
-                            index
-                          );
-                          if (typeof result === "string") {
+                          return;
+                        } else {
+                          result.then(() => {
                             newTrackedIsoStates[index].isUpdating = false;
                             newTrackedIsoStates[index].hasUpdate = undefined;
                             setTrackedIsoStates(newTrackedIsoStates);
                             forceUpdate();
-                            return;
-                          } else {
-                            result.then(() => {
-                              newTrackedIsoStates[index].isUpdating = false;
-                              newTrackedIsoStates[index].hasUpdate = undefined;
-                              setTrackedIsoStates(newTrackedIsoStates);
-                              forceUpdate();
-                              build.version = trackedIsoStates[index].hasUpdate;
-                            });
-                          }
+                            build.version = trackedIsoStates[index].hasUpdate;
+                          });
                         }
-                      }}
-                    >
-                      {trackedIsoStates[index]?.isUpdating &&
-                        <CircularProgress size={28} color="default" />
                       }
-                      {!trackedIsoStates[index]?.isUpdating &&
+                    }}
+                  >
+                    {trackedIsoStates[index]?.isUpdating && (
+                      <CircularProgress size={"1.36rem"} color="default" />
+                    )}
+                    {!trackedIsoStates[index]?.isUpdating && (
+                      <Badge
+                        color="error"
+                        variant="dot"
+                        invisible={!trackedIsoStates[index]?.hasUpdate}
+                        showZero
+                      >
                         <UpdateIcon />
-                      }
-                    </IconButton>
-                  </Badge>
+                      </Badge>
+                    )}
+                  </IconButton>
                 </Paper>
               </Grid>
             );
           })}
       </Grid>
-      <Pagination className={classes.pagination} disabled={data.length < MAX_SIZE} count={Math.ceil(data.length / MAX_SIZE)} page={page} onChange={(ev, val) => setPage(val)} />
+      <Pagination
+        className={classes.pagination}
+        disabled={data.length < MAX_SIZE}
+        count={Math.ceil(data.length / MAX_SIZE)}
+        page={page}
+        onChange={(ev, val) => setPage(val)}
+      />
     </>
   );
 }
