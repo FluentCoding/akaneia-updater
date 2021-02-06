@@ -21,7 +21,13 @@ export default function App() {
 
   return (
     <Container maxWidth="sm" className={classes.root}>
-      <SnackbarProvider maxSnack={1}>
+      <SnackbarProvider
+        maxSnack={1}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
         <Grid container direction="column" justify="center" alignItems="center">
           <Slide direction="down" in mountOnEnter unmountOnExit>
             <Grid item>

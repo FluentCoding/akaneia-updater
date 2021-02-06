@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
   fab: {
     position: "absolute",
-    bottom: theme.spacing(3),
-    right: theme.spacing(3),
+    bottom: theme.spacing(2.5),
+    right: theme.spacing(2.5),
   },
   settingsFab: {
     position: "absolute",
-    bottom: theme.spacing(3),
-    right: theme.spacing(12),
+    bottom: theme.spacing(2.5),
+    right: theme.spacing(11.5),
   },
   setupButton: {
     textDecoration: "none",
@@ -56,7 +56,6 @@ export default function Home() {
       if (!vanillaIsoPath) {
         enqueueSnackbar("Please specify a vanilla iso in the settings!", {
           variant: "error",
-          anchorOrigin: { horizontal: "right", vertical: "top" },
         });
       } else if (!fs.existsSync(store.get("vanillaIsoPath"))) {
         enqueueSnackbar(

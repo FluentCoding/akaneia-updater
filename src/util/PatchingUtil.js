@@ -28,7 +28,6 @@ export const patchROM = (
     enqueueSnackbar(message, {
       variant: "info",
       autoHideDuration: null,
-      anchorOrigin: { horizontal: "right", vertical: "top" },
       action: (key) => {
         lastSnackbar = key;
       },
@@ -75,13 +74,11 @@ export const patchROM = (
                   enqueueSnackbar &&
                     enqueueSnackbar("Patch failed!", {
                       variant: "error",
-                      anchorOrigin: { horizontal: "right", vertical: "top" },
                     });
                 } else {
                   enqueueSnackbar &&
                     enqueueSnackbar("Patch succeed!", {
                       variant: "success",
-                      anchorOrigin: { horizontal: "right", vertical: "top" },
                     });
                   let trackedIsos = store.get("trackedIsos", []);
                   const newTrackedIso = {

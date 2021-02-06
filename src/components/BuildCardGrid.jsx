@@ -109,12 +109,10 @@ export default function BuildCardGrid(props) {
           if (err) {
             enqueueSnackbar("Deleting the file failed!", {
               variant: "error",
-              anchorOrigin: { horizontal: "right", vertical: "top" },
             });
           } else {
             enqueueSnackbar("Deletion succeed!", {
               variant: "success",
-              anchorOrigin: { horizontal: "right", vertical: "top" },
             });
           }
         });
@@ -139,7 +137,6 @@ export default function BuildCardGrid(props) {
       if (!result) {
         enqueueSnackbar("Connection failed!", {
           variant: "error",
-          anchorOrigin: { horizontal: "right", vertical: "top" },
         });
         return;
       }
