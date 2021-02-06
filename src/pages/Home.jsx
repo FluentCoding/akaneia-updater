@@ -25,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
   fab: {
     position: "absolute",
-    bottom: theme.spacing(5),
-    right: theme.spacing(5),
+    bottom: theme.spacing(3),
+    right: theme.spacing(3),
   },
   settingsFab: {
     position: "absolute",
-    bottom: theme.spacing(5),
-    left: theme.spacing(5),
+    bottom: theme.spacing(3),
+    right: theme.spacing(12),
   },
   setupButton: {
     textDecoration: "none",
@@ -75,6 +75,7 @@ export default function Home() {
   return (
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
+        <Settings open={settingsOpen} setOpen={setSettingsOpen} />
         <Grid item>
           <Logo />
         </Grid>
@@ -111,9 +112,6 @@ export default function Home() {
               </Fab>
             </Link>
           </Grow>
-        </Grid>
-        <Grid item>
-          <Settings open={settingsOpen} setOpen={setSettingsOpen} />
         </Grid>
       </Grid>
     </Box>

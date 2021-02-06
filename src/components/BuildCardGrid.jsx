@@ -124,7 +124,7 @@ export default function BuildCardGrid() {
   useEffect(() => {
     if (!loading) return;
 
-    fetchReleases().then(result => {
+    fetchReleases().then((result) => {
       setLoading(false);
       if (!result) {
         enqueueSnackbar("Connection failed!", {
@@ -153,13 +153,13 @@ export default function BuildCardGrid() {
         setTrackedIsoStates(trackedIsoStates.concat([trackedIsoState]));
       });
     });
-  }, [data, loading, trackedIsoStates]);
+  }, []);
 
   return (
     <>
       <Dialog
         open={open}
-        onClose={() => handleClose('cancel')}
+        onClose={() => handleClose("cancel")}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
