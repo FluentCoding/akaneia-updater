@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 19,
   },
   version: {
-    marginInline: "1rem",
+    marginInline: "0.5rem",
   },
   cover: {
     width: "3rem",

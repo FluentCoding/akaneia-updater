@@ -45,7 +45,7 @@ export default function Home() {
 
   const classes = useStyles();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [isUpdating, setUpdating] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -74,9 +74,6 @@ export default function Home() {
     <Box className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-        <Grid item>
-          <Logo />
-        </Grid>
         <Grow in mountOnEnter unmountOnExit>
           <Grid item>
             <BuildCardGrid setUpdating={setUpdating} />
@@ -98,7 +95,7 @@ export default function Home() {
           <Grow in mountOnEnter unmountOnExit>
             <Fab
               className={classes.fab}
-              disabled={isUpdating}
+              disabled={updating}
               color="primary"
               onClick={() => history.push("/setup")}
             >

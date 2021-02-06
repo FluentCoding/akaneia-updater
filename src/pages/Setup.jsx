@@ -226,7 +226,6 @@ export default function Setup() {
 
   return (
     <div className={classes.root}>
-      <Logo />
       <Stepper
         className={classes.stepper}
         activeStep={activeStep}
