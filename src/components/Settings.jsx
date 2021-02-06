@@ -1,6 +1,5 @@
 import store from "../util/config";
 import FileSelector from "./FileSelector";
-import Box from "@material-ui/core/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -26,16 +25,17 @@ const Settings = (props) => {
       <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <Box>Path of your unmodified SSBM iso:</Box>
-          <FileSelector
-            accept=".iso"
-            placeholder="Select an unmodified SSBM iso"
-            variant="outlined"
-            key="0"
-            file={store.get("vanillaIsoPath")}
-            setFile={(val) => store.set("vanillaIsoPath", val)}
-          />
+          Path of your unmodified SSBM iso:
         </DialogContentText>
+        <FileSelector
+          accept=".iso"
+          placeholder="Select an unmodified SSBM iso"
+          variant="outlined"
+          key="0"
+          id="0"
+          file={store.get("vanillaIsoPath")}
+          setFile={(val) => store.set("vanillaIsoPath", val)}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={() => props.setOpen(false)} color="primary" autoFocus>

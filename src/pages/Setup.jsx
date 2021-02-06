@@ -5,6 +5,7 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Grow from "@material-ui/core/Grow";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSnackbar } from "notistack";
@@ -15,7 +16,6 @@ import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
 import Updater from "../components/Updater";
 import md5File from "md5-file";
-import Logo from "../components/Logo";
 import { useHistory } from "react-router-dom";
 import store from "../util/config";
 
@@ -122,6 +122,7 @@ const StepContent = ({ stepIndex }) => {
           accept=".iso"
           placeholder="Select an unmodified SSBM iso"
           key="0"
+          id="0"
           file={isoFile ?? store.get("vanillaIsoPath")}
           setFile={setIsoFile}
         />
@@ -132,6 +133,7 @@ const StepContent = ({ stepIndex }) => {
         <FileSelector
           placeholder="Specify the save path"
           key="1"
+          id="1"
           save
           file={destFile}
           setFile={setDestFile}
@@ -225,7 +227,7 @@ export default function Setup() {
   };
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
       <Stepper
         className={classes.stepper}
         activeStep={activeStep}
@@ -237,20 +239,20 @@ export default function Setup() {
           </Step>
         ))}
       </Stepper>
-      <div>
+      <Box>
         {activeStep === steps.length ? (
-          <div>
+          <Box>
             <Typography className={classes.instructions}>
               All steps completed
             </Typography>
             <Button onClick={handleReset}>Patch again</Button>
-          </div>
+          </Box>
         ) : (
-          <div style={{ textAlign: "center" }}>
+          <Box style={{ textAlign: "center" }}>
             <Typography className={classes.instructions}>
               <StepContent stepIndex={activeStep} />
             </Typography>
-            <div
+            <Box
               style={{
                 color: "#ff0033",
                 fontSize: 14,
@@ -259,9 +261,9 @@ export default function Setup() {
               }}
             >
               {error}
-            </div>
+            </Box>
             <Grow in mountOnEnter unmountOnExit>
-              <div className={classes.navigationButtons}>
+              <Box className={classes.navigationButtons}>
                 <Button
                   onClick={handleBack}
                   className={classes.backButton}
@@ -279,18 +281,18 @@ export default function Setup() {
                   disabled={loading || disabledNext}
                 >
                   {loading ? (
-                    <CircularProgress size={24} color="black" />
+                    <CircularProgress size={24} color="inherit" />
                   ) : activeStep === steps.length - 1 ? (
                     "Finish"
                   ) : (
                     "Next"
                   )}
                 </Button>
-              </div>
+              </Box>
             </Grow>
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

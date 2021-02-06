@@ -74,23 +74,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function useForceUpdate() {
-  const [value, setValue] = useState(0); // integer state
-  return () => setValue((value) => value + 1); // update the state to force render
-}
-
 export default function BuildCardGrid(props) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   var data = store.get("trackedIsos");
   const [trackedIsoStates, setTrackedIsoStates] = useState([]);
   const [open, setOpen] = useState(false);
   const [deletionIndex, setDeletionIndex] = useState(undefined);
   const [page, setPage] = useState(1);
-  const forceUpdate = useForceUpdate();
 
   const handleClickOpen = (index) => {
     setDeletionIndex(index);
@@ -163,7 +159,7 @@ export default function BuildCardGrid(props) {
 
       setTrackedIsoStates(trackedIsoStates);
     });
-  }, []);
+  }, [data, enqueueSnackbar, loading]);
 
   return (
     <>
@@ -206,10 +202,10 @@ export default function BuildCardGrid(props) {
         {data &&
           data.map((build, index) => {
             if (index < page * MAX_SIZE - MAX_SIZE || index >= page * MAX_SIZE)
-              return;
+              return undefined;
 
             return (
-              <Grid item>
+              <Grid item key={index}>
                 <Paper className={classes.card} elevation={3}>
                   <Box className={classes.content}>
                     {build.name}

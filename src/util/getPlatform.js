@@ -1,6 +1,6 @@
 import { platform } from "os";
 
-export default () => {
+const getPlatfrom = () => {
   switch (platform()) {
     case "aix":
     case "freebsd":
@@ -17,3 +17,5 @@ export default () => {
       return undefined;
   }
 };
+
+export default getPlatfrom;

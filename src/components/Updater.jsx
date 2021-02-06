@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "1rem",
     fontSize: "1.3rem",
   },
+  button: {
+    marginInline: 10,
+  },
 }));
 
 export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
@@ -23,12 +26,11 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
 
   useEffect(() => {
     fetchReleases().then((result) => {
-      if (result === null)
-        return;
+      if (result === null) return;
       setVersion(result.version);
       setAssets(result.assets);
     });
-  }, []);
+  }, [setVersion]);
 
   const classes = useStyles();
 
@@ -39,18 +41,19 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
           <Typography className={classes.instructions}>
             Choose the version you want to use
           </Typography>
-          {assets.map((asset) => {
-            var assetDetails = path.parse(asset.name);
-            if (assetDetails.ext !== ".xdelta") return;
+          {assets.map((asset, index) => {
+            const assetDetails = path.parse(asset.name);
+            if (assetDetails.ext !== ".xdelta") return undefined;
 
-            var assetName = assetDetails.name;
+            const assetName = assetDetails.name;
 
             return (
               <Button
+                className={classes.button}
                 disabled={loading}
                 color="primary"
                 variant="contained"
-                style={{ marginRight: 10 }}
+                key={index}
                 startIcon={
                   selectedAsset?.downloadUrl === asset.browser_download_url ? (
                     <CheckBox />

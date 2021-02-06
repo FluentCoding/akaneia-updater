@@ -12,7 +12,6 @@ import store from "../util/config";
 import fs from "fs";
 
 import Settings from "../components/Settings";
-import Logo from "../components/Logo";
 import BuildCardGrid from "../components/BuildCardGrid";
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +66,7 @@ export default function Home() {
         );
       }
     }
-  }, []);
+  }, [enqueueSnackbar, history]);
 
   return (
     <Box className={classes.root}>
@@ -80,14 +79,14 @@ export default function Home() {
         </Grow>
         <Grid item>
           <Grow in mountOnEnter unmountOnExit>
-            <div
+            <Box
               className={classes.settingsFab}
               onClick={() => setSettingsOpen(true)}
             >
               <Fab color="primary">
                 <SettingsIcon />
               </Fab>
-            </div>
+            </Box>
           </Grow>
         </Grid>
         <Grid item>

@@ -34,6 +34,7 @@ function createWindow() {
       enableRemoteModule: true,
       contextIsolation: false,
       webSecurity: false,
+      allowRunningInsecureContent: false,
     },
   });
   mainWindow.loadURL(
@@ -48,17 +49,14 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 
   electron.ipcMain.on("select-dirs", async (_event, arg) => {
-    const result = await electron.dialog.showSaveDialogSync(
-      electron.mainWindow,
-      {
-        filters: [
-          {
-            name: "Gamecube Game Image",
-            extensions: ["iso"],
-          },
-        ],
-      }
-    );
+    const result = await electron.dialog.showSaveDialogSync(mainWindow, {
+      filters: [
+        {
+          name: "Gamecube Game Image",
+          extensions: ["iso"],
+        },
+      ],
+    });
     if (!result) return;
     mainWindow.webContents.send("dir-selected-" + arg, result);
   });
