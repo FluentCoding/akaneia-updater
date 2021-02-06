@@ -16,7 +16,7 @@ import fs from "fs";
 
 import Settings from "../components/Settings";
 import Logo from "../components/Logo";
-const BuildCardGrid = React.lazy(() => import("../components/BuildCardGrid"));
+import BuildCardGrid from "../components/BuildCardGrid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,15 +81,7 @@ export default function Home() {
         </Grid>
         <Grow in mountOnEnter unmountOnExit>
           <Grid item>
-            <Suspense
-              fallback={
-                <Backdrop open>
-                  <CircularProgress />
-                </Backdrop>
-              }
-            >
-              <BuildCardGrid />
-            </Suspense>
+            <BuildCardGrid />
           </Grid>
         </Grow>
         <Grid item>
