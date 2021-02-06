@@ -4,7 +4,9 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
-import Delete from "@material-ui/icons/Delete";
+import DeleteIcon from "@material-ui/icons/Delete";
+import UpdateIcon from "@material-ui/icons/Update";
+import Chip from "@material-ui/core/Chip";
 import store from "../util/config";
 import { Badge, Button, CircularProgress } from "@material-ui/core";
 import { fetchReleases } from "../util/GithubUtil";
@@ -46,7 +48,7 @@ const useStyles = makeStyles(() => ({
     fontSize: 19,
   },
   version: {
-    fontSize: 16,
+    marginInline: "1rem",
   },
   cover: {
     width: "3rem",
@@ -190,21 +192,23 @@ export default function BuildCardGrid() {
               <Grid item>
                 <Paper className={classes.card} elevation={3}>
                   <Box className={classes.content}>
-                    <Box>{build?.name}</Box>
-                    <Box className={classes.version} color="text.secondary">
-                      {build.version}
-                    </Box>
+                    {build.name}
+                    <Chip
+                      className={classes.version}
+                      color="default"
+                      label={build.version}
+                    />
                   </Box>
                   <Box className={classes.button}>
                     <IconButton
                       disabled={trackedIsoStates[index]?.isUpdating}
                       onClick={() => handleClickOpen(index)}
                     >
-                      <Delete
+                      <DeleteIcon
                         color={
                           trackedIsoStates[index]?.isUpdating
                             ? "disabled"
-                            : "secondary"
+                            : "error"
                         }
                       />
                     </IconButton>
@@ -214,14 +218,13 @@ export default function BuildCardGrid() {
                     badgeContent={trackedIsoStates[index]?.hasUpdate}
                     showZero
                   >
-                    <Button
+                    <IconButton
                       variant="contained"
-                      color="primary"
+                      color="inherit"
                       disabled={
                         !trackedIsoStates[index]?.hasUpdate ||
                         trackedIsoStates[index]?.isUpdating
                       }
-                      style={{ marginLeft: 5, marginRight: 5 }}
                       onClick={() => {
                         if (trackedIsoStates[index]?.hasUpdate) {
                           const newTrackedIsoStates = trackedIsoStates;
@@ -260,13 +263,8 @@ export default function BuildCardGrid() {
                       {isUpdating && (
                         <CircularProgress size={28} color="default" />
                       )}
-                      {trackedIsoStates[index]?.hasUpdate &&
-                        !trackedIsoStates[index]?.isUpdating &&
-                        "Update"}
-                      {!trackedIsoStates[index]?.hasUpdate &&
-                        !trackedIsoStates[index]?.isUpdating &&
-                        "No update available"}
-                    </Button>
+                      <UpdateIcon />
+                    </IconButton>
                   </Badge>
                 </Paper>
               </Grid>
