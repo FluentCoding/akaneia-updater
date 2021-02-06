@@ -75,7 +75,7 @@ function useForceUpdate() {
   return () => setValue((value) => value + 1); // update the state to force render
 }
 
-export default function BuildCardGrid() {
+export default function BuildCardGrid(props) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
@@ -249,6 +249,7 @@ export default function BuildCardGrid() {
                       onClick={() => {
                         if (trackedIsoStates[index]?.hasUpdate) {
                           const newTrackedIsoStates = trackedIsoStates;
+                          props.setUpdating(true);
                           newTrackedIsoStates[index].isUpdating = true;
                           setTrackedIsoStates(newTrackedIsoStates);
                           forceUpdate();
@@ -263,6 +264,7 @@ export default function BuildCardGrid() {
                             undefined,
                             index
                           );
+                          props.setUpdating(false);
                           if (typeof result === "string") {
                             newTrackedIsoStates[index].isUpdating = false;
                             newTrackedIsoStates[index].hasUpdate = undefined;
@@ -278,8 +280,7 @@ export default function BuildCardGrid() {
                               build.version = trackedIsoStates[index].hasUpdate;
                             });
                           }
-                        }
-                      }}
+                      }}}
                     >
                       {trackedIsoStates[index]?.isUpdating &&
                         <CircularProgress size={28} color="default" />
