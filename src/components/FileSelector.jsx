@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FileSelector({
   accept,
+  variant,
   placeholder,
   save,
   multiple,
@@ -67,7 +68,7 @@ export default function FileSelector({
   }, [save, key, setFile]);
 
   return (
-    <Paper className={classes.fileInputField}>
+    <Paper className={classes.fileInputField} variant={variant}>
       <InputBase
         className={classes.inputBase}
         id="outlined-basic"

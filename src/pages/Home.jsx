@@ -39,14 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const history = useHistory();
-  
+
   const classes = useStyles();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (!store.get("trackedIsos")?.length) 
-      history.push("/setup");
+    if (!store.get("trackedIsos")?.length) history.push("/setup");
     else {
       const vanillaIsoPath = store.get("vanillaIsoPath");
 

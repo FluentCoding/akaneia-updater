@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSnackbar } from "notistack";
 import { patchROM } from "../util/PatchingUtil";
-import fs from 'fs';
+import fs from "fs";
 
 import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
@@ -72,7 +72,12 @@ function validateStep(
       if (!destFile) return "Error";
 
       // check if dest path is already used by other tracked isos
-      if (store.has("trackedIsos") && store.get("trackedIsos").find(trackedIso => destFile === trackedIso.destPath)) {
+      if (
+        store.has("trackedIsos") &&
+        store
+          .get("trackedIsos")
+          .find((trackedIso) => destFile === trackedIso.destPath)
+      ) {
         return "You're already using this ISO for tracking!";
       }
 

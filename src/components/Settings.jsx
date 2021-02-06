@@ -22,6 +22,7 @@ export default (props) => {
           <FileSelector
             accept=".iso"
             placeholder="Select an unmodified SSBM iso"
+            variant="outlined"
             key="0"
             file={store.get("vanillaIsoPath")}
             setFile={(val) => store.set("vanillaIsoPath", val)}
