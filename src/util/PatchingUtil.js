@@ -2,20 +2,11 @@ import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
 import { execFile } from "child_process";
+import isDev from "electron-is-dev";
 import isPackaged from "electron-is-packaged";
-import { rootPath } from "electron-root-path";
 import { remote } from "electron";
 import getPlatform from "./getPlatform";
 const app = remote.app;
-
-const IS_PROD = process.env.NODE_ENV === "production";
-const root = rootPath;
-const { getAppPath } = app;
-
-const binariesPath =
-  IS_PROD && isPackaged
-    ? path.join(path.dirname(getAppPath()), "..", "./Resources", "./bin")
-    : path.join(root, "./resources", getPlatform(), "./bin");
 
 export const patchROM = (
   asset,
@@ -60,6 +51,17 @@ export const patchROM = (
       res.arrayBuffer().then((deltaBuffer) => {
         return fs.writeFile(assetPath, new Uint8Array(deltaBuffer), (data) => {
           showInfo("Patching game...");
+          // Get the base path of binaries
+          const binariesPath =
+            !isDev && isPackaged
+              ? path.join(
+                  path.dirname(app.getAppPath()),
+                  "..",
+                  "./Resources",
+                  "./bin"
+                )
+              : path.join(app.getAppPath(), "./resources", getPlatform());
+
           const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
           try {
             execFile(
