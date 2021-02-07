@@ -1,10 +1,11 @@
-import makeStyles from "@material-ui/styles/makeStyles";
 import { SnackbarProvider } from "notistack";
+
 import React from "react";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Slide from "@material-ui/core/Slide";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Logo from "./components/Logo";
 import Main from "./components/Main";

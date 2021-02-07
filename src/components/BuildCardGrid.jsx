@@ -1,15 +1,16 @@
-import { Badge, Button, CircularProgress } from "@material-ui/core";
 import compareVersions from "compare-versions";
 import fs from "fs";
 import { useSnackbar } from "notistack";
 import path from "path";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
+import Badge from "@material-ui/core/Badge";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -19,11 +20,9 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-
-import Pagination from "@material-ui/lab/Pagination";
-
 import DeleteIcon from "@material-ui/icons/Delete";
 import UpdateIcon from "@material-ui/icons/Update";
+import Pagination from "@material-ui/lab/Pagination";
 
 import { fetchReleases } from "../util/GithubUtil";
 import { patchROM } from "../util/PatchingUtil";

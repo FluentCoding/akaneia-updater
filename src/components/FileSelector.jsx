@@ -1,5 +1,5 @@
-import { Save } from "@material-ui/icons";
 import pathUtil from "path";
+
 import React, { useState, useEffect } from "react";
 
 import Divider from "@material-ui/core/Divider";
@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { Save } from "@material-ui/icons";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 
 import useSetupStore from "../SetupStore";
