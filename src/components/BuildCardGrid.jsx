@@ -310,7 +310,7 @@ export default function BuildCardGrid(props) {
             );
           })}
       </Grid>
-      {data.length > 3 && (
+      {data?.length > 3 && (
         <Pagination
           className={classes.pagination}
           disabled={data.length < MAX_SIZE}
