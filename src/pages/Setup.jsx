@@ -21,7 +21,15 @@ import Updater from "../components/Updater";
 import { patchROM } from "../util/PatchingUtil";
 import store from "../util/config";
 
-const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
+const validMD5Hashes = [
+  "d4e70c064cc714ba8400a849cf299dbd1aa326fc",
+  "6e83240872d47cd080a28dea7b8907140c44bef5",
+  "e63d50e63a0cdd357f867342d542e7cec0c3a7c7",
+  "55109bc139b947c8b96b5fc913fbd91245104db8",
+  "2ce0ccfc8c31eafe2ff354fe03ac2dd94c20b937",
+  "49a04772e0a5d1974a4b1c8a7c0d1d71184f3978",
+  "71255a30a47b4c6aabb90308d7a514d09d93a7b5",
+];
 
 const invalidMD5 =
   "This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02";
