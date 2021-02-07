@@ -149,7 +149,7 @@ export default function BuildCardGrid(props) {
           name: trackedIso.assetName,
         };
         trackedIsoState.hasUpdate =
-          asset && compareVersions(result.version, trackedIso.version) === 1
+          asset && compareVersions(result.version, trackedIso.version) !== 0
             ? result.version
             : undefined;
         trackedIsoState.isUpdating = false;
