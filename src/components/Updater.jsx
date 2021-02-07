@@ -1,10 +1,12 @@
+import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
+import path from "path";
 import React, { useState, useEffect } from "react";
-import makeStyles from "@material-ui/styles/makeStyles";
+
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import path from "path";
-import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+
 import useSetupStore from "../SetupStore";
 import { fetchReleases } from "../util/GithubUtil";
 

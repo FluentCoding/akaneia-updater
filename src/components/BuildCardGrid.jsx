@@ -1,29 +1,33 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import UpdateIcon from "@material-ui/icons/Update";
-import Chip from "@material-ui/core/Chip";
-import store from "../util/config";
 import { Badge, Button, CircularProgress } from "@material-ui/core";
-import { fetchReleases } from "../util/GithubUtil";
-import { useState } from "react";
 import compareVersions from "compare-versions";
+import fs from "fs";
+import { useSnackbar } from "notistack";
+import path from "path";
+import React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+
+import Box from "@material-ui/core/Box";
+import Chip from "@material-ui/core/Chip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import fs from "fs";
-import path from "path";
-import { useSnackbar } from "notistack";
-import { patchROM } from "../util/PatchingUtil";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+
 import Pagination from "@material-ui/lab/Pagination";
+
+import DeleteIcon from "@material-ui/icons/Delete";
+import UpdateIcon from "@material-ui/icons/Update";
+
+import { fetchReleases } from "../util/GithubUtil";
+import { patchROM } from "../util/PatchingUtil";
+import store from "../util/config";
 
 const MAX_SIZE = 3;
 

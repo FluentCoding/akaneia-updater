@@ -1,12 +1,13 @@
-import React from "react";
-import Container from "@material-ui/core/Container";
-import Slide from "@material-ui/core/Slide";
-import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/styles/makeStyles";
 import { SnackbarProvider } from "notistack";
+import React from "react";
 
-import Main from "./components/Main";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Slide from "@material-ui/core/Slide";
+
 import Logo from "./components/Logo";
+import Main from "./components/Main";
 
 const useStyles = makeStyles(() => ({
   root: {

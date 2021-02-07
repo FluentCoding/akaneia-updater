@@ -1,22 +1,23 @@
+import fs from "fs";
+import md5File from "md5-file";
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
+import { useHistory } from "react-router-dom";
+
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Grow from "@material-ui/core/Grow";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Grow from "@material-ui/core/Grow";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
+import Stepper from "@material-ui/core/Stepper";
 import Typography from "@material-ui/core/Typography";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { useSnackbar } from "notistack";
-import { patchROM } from "../util/PatchingUtil";
-import fs from "fs";
+import { makeStyles } from "@material-ui/core/styles";
 
-import FileSelector from "../components/FileSelector";
 import useSetupStore from "../SetupStore";
+import FileSelector from "../components/FileSelector";
 import Updater from "../components/Updater";
-import md5File from "md5-file";
-import { useHistory } from "react-router-dom";
+import { patchROM } from "../util/PatchingUtil";
 import store from "../util/config";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];

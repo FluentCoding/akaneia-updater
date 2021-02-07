@@ -1,12 +1,14 @@
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import "fontsource-roboto";
 import React from "react";
 import ReactDOM from "react-dom";
-import "fontsource-roboto";
+import { HashRouter } from "react-router-dom";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import theme from "./theme";
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { HashRouter } from "react-router-dom";
+import theme from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>

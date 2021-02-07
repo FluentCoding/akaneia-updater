@@ -1,11 +1,13 @@
-import fs from "fs";
-import path from "path";
-import fetch from "node-fetch";
 import { execFile } from "child_process";
+import { remote } from "electron";
 import isDev from "electron-is-dev";
 import isPackaged from "electron-is-packaged";
-import { remote } from "electron";
+import fs from "fs";
+import fetch from "node-fetch";
+import path from "path";
+
 import getPlatform from "./getPlatform";
+
 const app = remote.app;
 
 export const patchROM = (

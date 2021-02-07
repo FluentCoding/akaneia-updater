@@ -1,5 +1,5 @@
 import Box from "@material-ui/core/Box";
-import makeStyles from "@material-ui/styles/makeStyles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import logo from "../static/logo.svg";
 
