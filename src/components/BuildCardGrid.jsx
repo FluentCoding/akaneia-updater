@@ -20,6 +20,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
 import UpdateIcon from "@material-ui/icons/Update";
 import Pagination from "@material-ui/lab/Pagination";
@@ -52,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     marginLeft: "1rem",
     fontSize: 19,
+  },
+  arrow: {
+    verticalAlign: "text-top",
   },
   version: {
     marginInline: "0.5rem",
@@ -217,6 +221,16 @@ export default function BuildCardGrid(props) {
                       color="default"
                       label={build.version}
                     />
+                    {trackedIsoStates[index]?.hasUpdate && (
+                      <ArrowRightAltIcon className={classes.arrow} />
+                    )}
+                    {trackedIsoStates[index]?.hasUpdate && (
+                      <Chip
+                        className={classes.version}
+                        color="default"
+                        label={trackedIsoStates[index]?.hasUpdate}
+                      />
+                    )}
                   </Box>
                   <Box className={classes.button}>
                     <IconButton
@@ -232,63 +246,65 @@ export default function BuildCardGrid(props) {
                       />
                     </IconButton>
                   </Box>
-                  <Badge
-                    color="error"
-                    invisible={!trackedIsoStates[index]?.hasUpdate}
-                    badgeContent={trackedIsoStates[index]?.hasUpdate}
-                    showZero
-                  >
-                    <IconButton
-                      variant="contained"
-                      color="inherit"
-                      disabled={
-                        !trackedIsoStates[index]?.hasUpdate ||
-                        trackedIsoStates[index]?.isUpdating
-                      }
-                      onClick={() => {
-                        if (trackedIsoStates[index]?.hasUpdate) {
-                          const newTrackedIsoStates = trackedIsoStates;
-                          props.setUpdating(true);
-                          newTrackedIsoStates[index].isUpdating = true;
+                  <IconButton
+                    variant="contained"
+                    color="inherit"
+                    disabled={
+                      !trackedIsoStates[index]?.hasUpdate ||
+                      trackedIsoStates[index]?.isUpdating
+                    }
+                    onClick={() => {
+                      if (trackedIsoStates[index]?.hasUpdate) {
+                        const newTrackedIsoStates = trackedIsoStates;
+                        props.setUpdating(true);
+                        newTrackedIsoStates[index].isUpdating = true;
+                        setTrackedIsoStates(newTrackedIsoStates);
+                        forceUpdate();
+                        const result = patchROM(
+                          trackedIsoStates[index].asset,
+                          undefined,
+                          build.destPath,
+                          trackedIsoStates[index].hasUpdate,
+                          undefined,
+                          store,
+                          undefined,
+                          undefined,
+                          index
+                        );
+                        if (typeof result === "string") {
+                          props.setUpdating(false);
+                          newTrackedIsoStates[index].isUpdating = false;
+                          newTrackedIsoStates[index].hasUpdate = undefined;
                           setTrackedIsoStates(newTrackedIsoStates);
                           forceUpdate();
-                          const result = patchROM(
-                            trackedIsoStates[index].asset,
-                            undefined,
-                            build.destPath,
-                            trackedIsoStates[index].hasUpdate,
-                            undefined,
-                            store,
-                            undefined,
-                            undefined,
-                            index
-                          );
-                          if (typeof result === "string") {
+                          return;
+                        } else {
+                          result.then(() => {
                             props.setUpdating(false);
                             newTrackedIsoStates[index].isUpdating = false;
                             newTrackedIsoStates[index].hasUpdate = undefined;
                             setTrackedIsoStates(newTrackedIsoStates);
                             forceUpdate();
-                            return;
-                          } else {
-                            result.then(() => {
-                              props.setUpdating(false);
-                              newTrackedIsoStates[index].isUpdating = false;
-                              newTrackedIsoStates[index].hasUpdate = undefined;
-                              setTrackedIsoStates(newTrackedIsoStates);
-                              forceUpdate();
-                              build.version = trackedIsoStates[index].hasUpdate;
-                            });
-                          }
+                            build.version = trackedIsoStates[index].hasUpdate;
+                          });
                         }
-                      }}
-                    >
-                      {trackedIsoStates[index]?.isUpdating && (
-                        <CircularProgress size={"1.36rem"} color="default" />
-                      )}
-                      {!trackedIsoStates[index]?.isUpdating && <UpdateIcon />}
-                    </IconButton>
-                  </Badge>
+                      }
+                    }}
+                  >
+                    {trackedIsoStates[index]?.isUpdating && (
+                      <CircularProgress size={"1.36rem"} color="default" />
+                    )}
+                    {!trackedIsoStates[index]?.isUpdating && (
+                      <Badge
+                        color="error"
+                        variant="dot"
+                        invisible={!trackedIsoStates[index]?.hasUpdate}
+                        showZero
+                      >
+                        <UpdateIcon />
+                      </Badge>
+                    )}
+                  </IconButton>
                 </Paper>
               </Grid>
             );
