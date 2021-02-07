@@ -61,7 +61,6 @@ export default function Home() {
           "The specified vanilla iso doesn't exist anymore! Please choose one in the settings!",
           {
             variant: "error",
-            anchorOrigin: { horizontal: "right", vertical: "top" },
           }
         );
       }
