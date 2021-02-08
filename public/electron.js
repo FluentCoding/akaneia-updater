@@ -1,5 +1,7 @@
 const electron = require("electron");
 const path = require("path");
+const fetch = require("node-fetch");
+const fs = require("fs");
 const isDev = require("electron-is-dev");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
@@ -33,8 +35,6 @@ function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
-      webSecurity: false,
-      allowRunningInsecureContent: false,
     },
   });
   mainWindow.loadURL(
@@ -48,7 +48,8 @@ function createWindow() {
 
   mainWindow.on("closed", () => (mainWindow = null));
 
-  electron.ipcMain.on("select-dirs", async (_event, arg) => {
+  // Dir selector
+  electron.ipcMain.on("select-dirs", async (_event, key) => {
     const result = await electron.dialog.showSaveDialogSync(mainWindow, {
       filters: [
         {
@@ -58,8 +59,25 @@ function createWindow() {
       ],
     });
     if (!result) return;
-    mainWindow.webContents.send("dir-selected-" + arg, result);
+    mainWindow.webContents.send("dir-selected-" + key, result);
   });
+
+  // File downloader
+  electron.ipcMain.on(
+    "download-tempfile",
+    async (_event, key, url, options, name) => {
+      const savePath = path.join(
+        app.getPath("temp"),
+        `${app.getName()}-${name}`
+      );
+      const res = await fetch(url, options);
+      res.arrayBuffer().then((buffer) =>
+        fs.writeFile(savePath, new Uint8Array(buffer), () => {
+          mainWindow.webContents.send("downloaded-tempfile-" + key, savePath);
+        })
+      );
+    }
+  );
 }
 app.on("ready", createWindow);
 app.on("window-all-closed", () => {
