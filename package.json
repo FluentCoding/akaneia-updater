@@ -5,7 +5,7 @@
   "contributors": [
     "Ananas"
   ],
-  "description": "An updater for the Akainea build",
+  "description": "An updater for the Akaneia SSBM build",
   "private": true,
   "repository": "git@github.com:ananas-dev/akaneia-updater",
   "license": "MIT",
