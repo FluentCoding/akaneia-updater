@@ -76,6 +76,7 @@ function createWindow() {
       log.error(
         `extensions should be an array but his type is ${typeof extensions}`
       );
+      return;
     } else {
       const result = await electron.dialog.showSaveDialogSync(mainWindow, {
         filters: [
@@ -87,6 +88,7 @@ function createWindow() {
       });
       if (!result) return;
       mainWindow.webContents.send("file-saved-" + key, result);
+      return;
     }
   });
 
@@ -101,16 +103,19 @@ function createWindow() {
       const res = await fetch(url, options);
       res.arrayBuffer().then((buffer) =>
         fs.writeFile(savePath, new Uint8Array(buffer), () => {
+          log.info("IPCMAIN::TEMP-FILE");
           mainWindow.webContents.send("downloaded-tempfile-" + key, savePath);
+          return;
         })
       );
     }
   );
 
   // Get the path of binaries
-  electron.ipcMain.on("get-binaries-path", async (_event) => {
+  electron.ipcMain.on("get-binaries-path", async (_event, key) => {
+    log.info("IPCMAIN::BINARY-PATH");
     mainWindow.webContents.send(
-      "binaries-path",
+      "binaries-path-" + key,
       !isDev && isPackaged
         ? path.join(
             path.dirname(app.getAppPath()),
@@ -120,6 +125,7 @@ function createWindow() {
           )
         : path.join(app.getAppPath(), "./resources", getPlatform())
     );
+    return;
   });
 }
 

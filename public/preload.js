@@ -1,5 +1,10 @@
 const { ipcRenderer } = require("electron");
+const log = require("electron-log");
 
+// Expose log to the renderer
+window.log = log.functions;
+
+// Event listeners
 process.once("loaded", () => {
   window.addEventListener("message", (evt) => {
     switch (evt.data.type) {
@@ -21,7 +26,7 @@ process.once("loaded", () => {
         );
         break;
       case "get-binaries-path":
-        ipcRenderer.send("get-binaries-path");
+        ipcRenderer.send("get-binaries-path", evt.data.key);
         break;
       default:
         break;
