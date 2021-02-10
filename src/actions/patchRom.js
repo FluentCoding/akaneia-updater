@@ -47,10 +47,8 @@ export default function patchRom(
       });
 
       ipcRenderer.once("downloaded-tempfile-" + key, (_event, assetPath) => {
-        window.log.info("downloaded");
         showInfo("Patching game...");
         try {
-          window.log.info(getBinPath("xdelta"));
           execFile(
             getBinPath("xdelta"),
             ["-dfs", isoFile, assetPath, destFile],
