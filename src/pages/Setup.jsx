@@ -93,7 +93,8 @@ function validateStep(
         clear,
         store,
         enqueueSnackbar,
-        closeSnackbar
+        closeSnackbar,
+        "setup"
       );
     default:
       return undefined;

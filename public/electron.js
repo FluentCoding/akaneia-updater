@@ -103,7 +103,7 @@ function createWindow() {
       const res = await fetch(url, options);
       res.arrayBuffer().then((buffer) =>
         fs.writeFile(savePath, new Uint8Array(buffer), () => {
-          log.info("IPCMAIN::TEMP-FILE");
+          log.info("downloaded-tempfile-" + key);
           mainWindow.webContents.send("downloaded-tempfile-" + key, savePath);
           return;
         })
@@ -113,7 +113,7 @@ function createWindow() {
 
   // Get the path of binaries
   electron.ipcMain.on("get-binaries-path", async (_event, key) => {
-    log.info("IPCMAIN::BINARY-PATH");
+    log.info("binaries-path-" + key);
     mainWindow.webContents.send(
       "binaries-path-" + key,
       !isDev && isPackaged
