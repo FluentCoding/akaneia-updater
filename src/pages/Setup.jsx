@@ -16,9 +16,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import useSetupStore from "../SetupStore";
+import patchRom from "../actions/patchRom";
 import FileSelector from "../components/FileSelector";
 import Updater from "../components/Updater";
-import { patchROM } from "../util/PatchingUtil";
 import store from "../util/config";
 
 const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
@@ -85,7 +85,7 @@ function validateStep(
         return "Your game file doesn't exist anymore!";
       }
 
-      return patchROM(
+      return patchRom(
         asset,
         isoFile,
         destFile,
@@ -136,6 +136,8 @@ const StepContent = ({ stepIndex }) => {
           key="1"
           id="1"
           save
+          name={"Gamecube Game Image"}
+          extensions={["iso"]}
           file={destFile}
           setFile={setDestFile}
         />

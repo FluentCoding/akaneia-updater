@@ -1,11 +1,13 @@
 const electron = require("electron");
-const path = require("path");
-const fetch = require("node-fetch");
-const fs = require("fs");
 const isDev = require("electron-is-dev");
+const isPackaged = require("electron-is-packaged");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
 const Store = require("electron-store");
+const path = require("path");
+const fetch = require("node-fetch");
+const fs = require("fs");
+const { platform } = require("os");
 
 // Configure logging
 
@@ -23,6 +25,25 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow() {
+  // Get the platfrom
+  const getPlatform = () => {
+    switch (platform()) {
+      case "aix":
+      case "freebsd":
+      case "linux":
+      case "openbsd":
+      case "android":
+        return "linux";
+      case "darwin":
+      case "sunos":
+        return "mac";
+      case "win32":
+        return "win";
+      default:
+        return undefined;
+    }
+  };
+
   mainWindow = new BrowserWindow({
     width: 600,
     minWidth: 600,
@@ -48,21 +69,28 @@ function createWindow() {
 
   mainWindow.on("closed", () => (mainWindow = null));
 
-  // Dir selector
-  electron.ipcMain.on("select-dirs", async (_event, key) => {
-    const result = await electron.dialog.showSaveDialogSync(mainWindow, {
-      filters: [
-        {
-          name: "Gamecube Game Image",
-          extensions: ["iso"],
-        },
-      ],
-    });
-    if (!result) return;
-    mainWindow.webContents.send("dir-selected-" + key, result);
+  // File saver
+  electron.ipcMain.on("save-file", async (_event, key, name, extensions) => {
+    if (!Array.isArray(extensions)) {
+      mainWindow.webContents.send("saving-file-failed" + key);
+      log.error(
+        `extensions should be an array but his type is ${typeof extensions}`
+      );
+    } else {
+      const result = await electron.dialog.showSaveDialogSync(mainWindow, {
+        filters: [
+          {
+            name: name,
+            extensions: extensions,
+          },
+        ],
+      });
+      if (!result) return;
+      mainWindow.webContents.send("file-saved-" + key, result);
+    }
   });
 
-  // File downloader
+  // Temp file downloader
   electron.ipcMain.on(
     "download-tempfile",
     async (_event, key, url, options, name) => {
@@ -78,7 +106,23 @@ function createWindow() {
       );
     }
   );
+
+  // Get the path of binaries
+  electron.ipcMain.on("get-binaries-path", async (_event) => {
+    mainWindow.webContents.send(
+      "binaries-path",
+      !isDev && isPackaged
+        ? path.join(
+            path.dirname(app.getAppPath()),
+            "..",
+            "./Resources",
+            "./bin"
+          )
+        : path.join(app.getAppPath(), "./resources", getPlatform())
+    );
+  });
 }
+
 app.on("ready", createWindow);
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

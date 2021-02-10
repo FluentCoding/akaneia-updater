@@ -47,6 +47,8 @@ export default function FileSelector({
   file,
   setFile,
   id,
+  name,
+  extensions,
 }) {
   const [path, setPath] = useState(file && pathUtil.basename(file)); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
@@ -60,13 +62,10 @@ export default function FileSelector({
 
   useEffect(() => {
     if (save) {
-      require("electron").ipcRenderer.on(
-        "dir-selected-" + id,
-        (_event, args) => {
-          setPath(pathUtil.basename(args));
-          setFile(args);
-        }
-      );
+      require("electron").ipcRenderer.on("file-saved-" + id, (_event, args) => {
+        setPath(pathUtil.basename(args));
+        setFile(args);
+      });
     }
   }, [save, id, setFile]);
 
@@ -98,8 +97,10 @@ export default function FileSelector({
           onClick={() => {
             if (save && !loading) {
               window.postMessage({
-                type: "select-dirs",
+                type: "save-file",
                 key: id,
+                name: name,
+                extensions: extensions, // must be an array
               });
             }
           }}

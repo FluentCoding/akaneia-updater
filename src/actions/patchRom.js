@@ -2,7 +2,7 @@ import { execFile } from "child_process";
 import { ipcRenderer } from "electron";
 import path from "path";
 
-export const patchROM = (
+export default function patchRom(
   asset,
   isoFile,
   destFile,
@@ -12,7 +12,7 @@ export const patchROM = (
   enqueueSnackbar,
   closeSnackbar,
   index
-) => {
+) {
   if (!asset) return "Error";
   if (!isoFile) isoFile = store.get("vanillaIsoPath");
 
@@ -48,7 +48,7 @@ export const patchROM = (
         showInfo("Patching game...");
         // Get the base path of binaries
         window.postMessage({
-          type: "get-binary-path",
+          type: "get-binaries-path",
         });
         ipcRenderer.on("binaries-path", (_event, binariesPath) => {
           const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
@@ -102,4 +102,4 @@ export const patchROM = (
       reject(error);
     }
   });
-};
+}
