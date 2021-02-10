@@ -46,7 +46,7 @@ export default function patchRom(
         name: `${asset.name}-${version}`,
       });
 
-      ipcRenderer.on("downloaded-tempfile-" + key, (_event, assetPath) => {
+      ipcRenderer.once("downloaded-tempfile-" + key, (_event, assetPath) => {
         window.log.info("downloaded");
         showInfo("Patching game...");
         try {
@@ -54,7 +54,7 @@ export default function patchRom(
           execFile(
             getBinPath("xdelta"),
             ["-dfs", isoFile, assetPath, destFile],
-            (err, stdout, stderr) => {
+            (err, _stdout, stderr) => {
               closeSnackbar && closeSnackbar(lastSnackbar);
               if (err) {
                 console.log(err);

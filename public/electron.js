@@ -1,6 +1,5 @@
 const electron = require("electron");
 const isDev = require("electron-is-dev");
-const isPackaged = require("electron-is-packaged");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
 const Store = require("electron-store");
@@ -85,7 +84,6 @@ function createWindow() {
         fs.writeFile(savePath, new Uint8Array(buffer), () => {
           log.info("downloaded-tempfile-" + key);
           mainWindow.webContents.send("downloaded-tempfile-" + key, savePath);
-          return;
         })
       );
     }
