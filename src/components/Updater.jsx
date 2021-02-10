@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
 
 import useSetupStore from "../SetupStore";
-import { fetchReleases } from "../util/GithubUtil";
+import { fetchLastRelease } from "../actions/github";
 
 const useStyles = makeStyles((theme) => ({
   instructions: {
@@ -28,7 +28,7 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
   const loading = useSetupStore((state) => state.loading);
 
   useEffect(() => {
-    fetchReleases().then((result) => {
+    fetchLastRelease().then((result) => {
       if (result === null) return;
       setVersion(result.version);
       setAssets(result.assets);

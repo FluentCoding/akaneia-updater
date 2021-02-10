@@ -24,26 +24,26 @@ const BrowserWindow = electron.BrowserWindow;
 // Window object
 let mainWindow;
 
-function createWindow() {
-  // Get the platfrom
-  const getPlatform = () => {
-    switch (platform()) {
-      case "aix":
-      case "freebsd":
-      case "linux":
-      case "openbsd":
-      case "android":
-        return "linux";
-      case "darwin":
-      case "sunos":
-        return "mac";
-      case "win32":
-        return "win";
-      default:
-        return undefined;
-    }
-  };
+// Get the platform
+const getPlatform = () => {
+  switch (platform()) {
+    case "aix":
+    case "freebsd":
+    case "linux":
+    case "openbsd":
+    case "android":
+      return "linux";
+    case "darwin":
+    case "sunos":
+      return "mac";
+    case "win32":
+      return "win";
+    default:
+      return undefined;
+  }
+};
 
+function createWindow() {
   mainWindow = new BrowserWindow({
     width: 600,
     minWidth: 600,

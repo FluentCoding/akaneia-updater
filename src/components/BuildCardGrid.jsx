@@ -25,8 +25,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import UpdateIcon from "@material-ui/icons/Update";
 import Pagination from "@material-ui/lab/Pagination";
 
-import { fetchReleases } from "../util/GithubUtil";
-import { patchROM } from "../util/PatchingUtil";
+import { fetchLastRelease } from "../actions/github";
+import patchRom from "../actions/patchRom";
 import store from "../util/config";
 
 const MAX_SIZE = 3;
@@ -135,7 +135,7 @@ export default function BuildCardGrid(props) {
   useEffect(() => {
     if (!loading) return;
 
-    fetchReleases().then((result) => {
+    fetchLastRelease().then((result) => {
       setLoading(false);
       if (!result) {
         enqueueSnackbar("Connection failed!", {
@@ -260,7 +260,7 @@ export default function BuildCardGrid(props) {
                         newTrackedIsoStates[index].isUpdating = true;
                         setTrackedIsoStates(newTrackedIsoStates);
                         forceUpdate();
-                        const result = patchROM(
+                        const result = patchRom(
                           trackedIsoStates[index].asset,
                           undefined,
                           build.destPath,

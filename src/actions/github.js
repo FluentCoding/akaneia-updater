@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/core";
 
-export const fetchReleases = async () => {
+export async function fetchLastRelease() {
   try {
     const octokit = new Octokit();
     const asyncResponse = await octokit.request(
@@ -19,4 +19,4 @@ export const fetchReleases = async () => {
   } catch (err) {
     console.error(err);
   }
-};
+}
