@@ -7,7 +7,6 @@ const Store = require("electron-store");
 const path = require("path");
 const fetch = require("node-fetch");
 const fs = require("fs");
-const { platform } = require("os");
 
 // Configure logging
 
@@ -23,25 +22,6 @@ const BrowserWindow = electron.BrowserWindow;
 
 // Window object
 let mainWindow;
-
-// Get the platform
-const getPlatform = () => {
-  switch (platform()) {
-    case "aix":
-    case "freebsd":
-    case "linux":
-    case "openbsd":
-    case "android":
-      return "linux";
-    case "darwin":
-    case "sunos":
-      return "mac";
-    case "win32":
-      return "win";
-    default:
-      return undefined;
-  }
-};
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -110,23 +90,6 @@ function createWindow() {
       );
     }
   );
-
-  // Get the path of binaries
-  electron.ipcMain.on("get-binaries-path", async (_event, key) => {
-    log.info("binaries-path-" + key);
-    mainWindow.webContents.send(
-      "binaries-path-" + key,
-      !isDev && isPackaged
-        ? path.join(
-            path.dirname(app.getAppPath()),
-            "..",
-            "./Resources",
-            "./bin"
-          )
-        : path.join(app.getAppPath(), "./resources", getPlatform())
-    );
-    return;
-  });
 }
 
 app.on("ready", createWindow);

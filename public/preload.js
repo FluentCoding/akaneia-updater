@@ -25,9 +25,6 @@ process.once("loaded", () => {
           evt.data.name
         );
         break;
-      case "get-binaries-path":
-        ipcRenderer.send("get-binaries-path", evt.data.key);
-        break;
       default:
         break;
     }

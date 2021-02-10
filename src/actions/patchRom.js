@@ -1,6 +1,7 @@
 import { execFile } from "child_process";
 import { ipcRenderer } from "electron";
-import path from "path";
+
+import { getBinPath } from "../util/bin";
 
 export default function patchRom(
   asset,
@@ -29,12 +30,12 @@ export default function patchRom(
 
   return new Promise(async (resolve, reject) => {
     try {
+      const key = index ?? "0";
       showInfo("Downloading patch file...");
-      let assetPath;
 
       window.postMessage({
         type: "download-tempfile",
-        key: index,
+        key: key,
         url: asset.downloadUrl,
         options: {
           redirect: "follow",
@@ -45,23 +46,13 @@ export default function patchRom(
         name: `${asset.name}-${version}`,
       });
 
-      ipcRenderer.on("downloaded-tempfile-" + index, (_event, path) => {
-        window.log.info("assetPath: " + path);
+      ipcRenderer.on("downloaded-tempfile-" + key, (_event, assetPath) => {
+        window.log.info("downloaded");
         showInfo("Patching game...");
-        // Get the base path of binaries
-        window.postMessage({
-          type: "get-binaries-path",
-          key: index,
-        });
-        assetPath = path;
-      });
-
-      ipcRenderer.on("binaries-path-" + index, (_event, binariesPath) => {
-        window.log.info("binariesPath: " + binariesPath);
-        const xdeltaPath = path.resolve(path.join(binariesPath, "./xdelta"));
         try {
+          window.log.info(getBinPath("xdelta"));
           execFile(
-            xdeltaPath,
+            getBinPath("xdelta"),
             ["-dfs", isoFile, assetPath, destFile],
             (err, stdout, stderr) => {
               closeSnackbar && closeSnackbar(lastSnackbar);
@@ -101,6 +92,7 @@ export default function patchRom(
             }
           );
         } catch (error) {
+          window.log.error(error);
           closeSnackbar && closeSnackbar();
         }
       });
