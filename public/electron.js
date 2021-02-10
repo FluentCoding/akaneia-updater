@@ -67,7 +67,6 @@ function createWindow() {
       });
       if (!result) return;
       mainWindow.webContents.send("file-saved-" + key, result);
-      return;
     }
   });
 
@@ -82,7 +81,6 @@ function createWindow() {
       const res = await fetch(url, options);
       res.arrayBuffer().then((buffer) =>
         fs.writeFile(savePath, new Uint8Array(buffer), () => {
-          log.info("downloaded-tempfile-" + key);
           mainWindow.webContents.send("downloaded-tempfile-" + key, savePath);
         })
       );
