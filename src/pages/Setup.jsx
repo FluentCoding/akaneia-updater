@@ -1,5 +1,4 @@
 import fs from "fs";
-import md5File from "md5-file";
 import { useSnackbar } from "notistack";
 
 import React, { useState } from "react";
@@ -16,14 +15,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import useSetupStore from "../SetupStore";
+import { isValidSsbmIso } from "../actions/checker";
 import patchRom from "../actions/patchRom";
 import FileSelector from "../components/FileSelector";
 import Updater from "../components/Updater";
 import store from "../util/config";
-
-const validMD5Hashes = ["0e63d4223b01d9aba596259dc155a174"];
-const invalidMD5 =
-  "This ISO will most likely not work with Akaneia! Try getting a valid one! NTSC-U 1.02";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,15 +53,18 @@ function validateStep(
 ) {
   switch (stepIndex) {
     case 0:
-      if (!isoFile) return "Error";
-      return md5File(isoFile).then((received) => {
-        if (validMD5Hashes.includes(received)) {
-          store.set("vanillaIsoPath", isoFile);
-          return;
-        } else {
-          return Promise.reject(invalidMD5);
-        }
-      });
+      if (!isoFile) {
+        return "Error";
+      } else {
+        return isValidSsbmIso(isoFile).then((success) =>
+          success
+            ? Promise.resolve(
+                "This ISO will most likely not work with Akaneia! " +
+                  "Try getting a valid one! NTSC-U 1.02"
+              )
+            : Promise.reject(undefined)
+        );
+      }
     case 1:
       if (!destFile) return "Error";
 
