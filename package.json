@@ -1,13 +1,13 @@
 {
   "name": "akaneia-updater",
   "version": "1.0.0",
-  "author": "FluentCoding",
+  "author": "Ananas",
   "contributors": [
-    "Ananas"
+    "FluentCoding"
   ],
   "description": "An updater for the Akaneia SSBM build",
   "private": true,
-  "repository": "git@github.com:ananas-dev/akaneia-updater",
+  "repository": "git@github.com:FluentCoding/akaneia-updater",
   "license": "MIT",
   "main": "public/electron.js",
   "homepage": "./",
