@@ -22,7 +22,7 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
-import UpdateIcon from "@material-ui/icons/Update";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { fetchLastRelease } from "../actions/github";
@@ -301,7 +301,7 @@ export default function BuildCardGrid(props) {
                         invisible={!trackedIsoStates[index]?.hasUpdate}
                         showZero
                       >
-                        <UpdateIcon />
+                        <GetAppIcon />
                       </Badge>
                     )}
                   </IconButton>
