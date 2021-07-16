@@ -47,8 +47,9 @@ export default function FileSelector({
   file,
   setFile,
   id,
-  name,
+  fileFormatName,
   extensions,
+  defaultName,
 }) {
   const [path, setPath] = useState(file && pathUtil.basename(file)); // duplicate for rerender
   const loading = useSetupStore((store) => store.loading);
@@ -99,8 +100,9 @@ export default function FileSelector({
               window.postMessage({
                 type: "save-file",
                 key: id,
-                name: name,
+                fileFormatName: fileFormatName,
                 extensions: extensions, // must be an array
+                defaultName: defaultName,
               });
             }
           }}

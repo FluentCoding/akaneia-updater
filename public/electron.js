@@ -49,7 +49,7 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 
   // File saver
-  electron.ipcMain.on("save-file", async (_event, key, name, extensions) => {
+  electron.ipcMain.on("save-file", async (_event, key, fileFormatName, extensions, defaultName) => {
     if (!Array.isArray(extensions)) {
       mainWindow.webContents.send("saving-file-failed" + key);
       log.error(
@@ -58,9 +58,10 @@ function createWindow() {
       return;
     } else {
       const result = await electron.dialog.showSaveDialogSync(mainWindow, {
+        defaultPath: `${defaultName}.${extensions[0]}`,
         filters: [
           {
-            name: name,
+            name: fileFormatName,
             extensions: extensions,
           },
         ],

@@ -12,8 +12,9 @@ process.once("loaded", () => {
         ipcRenderer.send(
           "save-file",
           evt.data.key,
-          evt.data.name,
-          evt.data.extensions
+          evt.data.fileFormatName,
+          evt.data.extensions,
+          evt.data.defaultName
         );
         break;
       case "download-tempfile":

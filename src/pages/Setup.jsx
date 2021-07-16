@@ -135,8 +135,9 @@ const StepContent = ({ stepIndex }) => {
           key="1"
           id="1"
           save
-          name={"Gamecube Game Image"}
+          fileFormatName={"Gamecube Game Image"}
           extensions={["iso"]}
+          defaultName="SSBM Akaneia"
           file={destFile}
           setFile={setDestFile}
         />
