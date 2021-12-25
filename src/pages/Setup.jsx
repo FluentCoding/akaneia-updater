@@ -131,7 +131,7 @@ const StepContent = ({ stepIndex }) => {
       setDisabledNext(destFile === undefined);
       return (
         <FileSelector
-          placeholder="Specify the save path"
+          placeholder="Select output location"
           key="1"
           id="1"
           save
