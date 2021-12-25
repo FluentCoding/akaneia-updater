@@ -42,7 +42,7 @@ export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
       {assets && (
         <>
           <Typography className={classes.instructions}>
-            Choose the version you want to use
+            Choose the version you want to download
           </Typography>
           {assets.map((asset, index) => {
             const assetDetails = path.parse(asset.name);
