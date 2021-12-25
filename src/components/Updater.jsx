@@ -1,7 +1,5 @@
 import path from "path";
 
-import React, { useState, useEffect } from "react";
-
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -9,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
 
 import useSetupStore from "../SetupStore";
-import { fetchLastRelease } from "../actions/github";
 
 const useStyles = makeStyles((theme) => ({
   instructions: {
@@ -23,17 +20,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ShowUpdate({ selectedAsset, setSelectedAsset }) {
-  const setVersion = useSetupStore((state) => state.setVersion);
-  const [assets, setAssets] = useState(undefined);
+  const assets = useSetupStore((state) => state.assets);
   const loading = useSetupStore((state) => state.loading);
-
-  useEffect(() => {
-    fetchLastRelease().then((result) => {
-      if (result === null) return;
-      setVersion(result.version);
-      setAssets(result.assets);
-    });
-  }, [setVersion]);
 
   const classes = useStyles();
 

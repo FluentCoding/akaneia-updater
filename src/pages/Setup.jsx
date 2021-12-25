@@ -1,7 +1,8 @@
 import fs from "fs";
 import { useSnackbar } from "notistack";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchLastRelease } from "../actions/github";
 import { useHistory } from "react-router-dom";
 
 import Box from "@material-ui/core/Box";
@@ -75,7 +76,7 @@ function validateStep(
           .get("trackedIsos")
           .find((trackedIso) => destFile === trackedIso.destPath)
       ) {
-        return "You're already using this ISO for tracking!";
+        return "This ISO is already being tracked!";
       }
 
       return;
@@ -112,6 +113,7 @@ const StepContent = ({ stepIndex }) => {
     useSetupStore((state) => state.selectedAsset),
     useSetupStore((state) => state.setSelectedAsset),
   ];
+  const version = useSetupStore((state) => state.version);
   const setDisabledNext = useSetupStore((state) => state.setDisabledNext);
   switch (stepIndex) {
     case 0:
@@ -137,7 +139,7 @@ const StepContent = ({ stepIndex }) => {
           save
           fileFormatName={"Gamecube Game Image"}
           extensions={["iso"]}
-          defaultName="SSBM Akaneia"
+          defaultName={version ? "SSBM Akaneia " + version : "SSBM Akaneia"}
           file={destFile}
           setFile={setDestFile}
         />
@@ -165,7 +167,8 @@ export default function Setup() {
   ];
   const isoFile = useSetupStore((state) => state.isoFile);
   const destFile = useSetupStore((state) => state.destFile);
-  const version = useSetupStore((state) => state.version);
+  const [version, setVersion] = [useSetupStore((state) => state.version), useSetupStore((state) => state.setVersion)];
+  const setAssets = useSetupStore((state) => state.setAssets);
   const clear = useSetupStore((state) => state.clear);
   const selectedAsset = useSetupStore((state) => state.selectedAsset);
   const disabledNext = useSetupStore((state) => state.disabledNext);
@@ -228,6 +231,16 @@ export default function Setup() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  useEffect(() => {
+    fetchLastRelease().then((result) => {
+      if (result === null)
+        return;
+
+      setVersion(result.version);
+      setAssets(result.assets);
+    });
+  }, [setVersion, setAssets]);
 
   return (
     <Box className={classes.root}>

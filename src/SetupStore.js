@@ -6,12 +6,14 @@ export default create((set) => ({
   loading: false,
   disabledNext: false,
   version: undefined,
+  assets: undefined,
   selectedAsset: undefined,
   setIsoFile: (value) => set({ isoFile: value }),
   setDestFile: (value) => set({ destFile: value }),
   setLoading: (value) => set({ loading: value }),
   setDisabledNext: (value) => set({ disabledNext: value }),
   setVersion: (value) => set({ version: value }),
+  setAssets: (value) => set({ assets: value }),
   setSelectedAsset: (value) => set({ selectedAsset: value }),
   clear: () =>
     set({
